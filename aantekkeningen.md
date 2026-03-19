@@ -15,10 +15,12 @@ Alles moet beschikbaar zijn via het web
 De rondloopsimulatie
 De top-down view
 De welkomstpagina
+Moet allemaal zonde reloads
 
 Punt twee:
 Watersimulatie
 Pagina met oude kaarten en weetjes
+Multilang
 
 
 Technologieën:
@@ -26,4 +28,7 @@ Vue
 MariaDB
 Unity (C#)
 JavaScript
-Symfony
+
+# Website
+De pagina zal randinformatie bevatten over de 3D ervaring en vervolgens kan de gebruiker naar beneden scrollen voor de ervaring (Met een knop om meteen naar de ervaring toe te gaan.)
+Verder kan ook een pagina gemaakt worden om simpel te navigeren door alle punten van interesses. (Zie voor inspo discover.matterport.com)
