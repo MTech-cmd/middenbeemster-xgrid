@@ -22,6 +22,11 @@ Watersimulatie
 Pagina met oude kaarten en weetjes
 Multilang
 
+simulatie:
+loophoogte = 1.60m 
+water hoogte moet 4 meter onder water
+top down view met de bij behoorden met de icoontjes met een naam. waar je op kan kliken om er heen te gaan zodat je daar rond kan lopen of direct de infomatie kan lezen. tijdens het rondlopen kan je op infomatie bubbletjes drukken waar de bij behoorden infomatie.
+
 
 Technologieën:
 Vue
