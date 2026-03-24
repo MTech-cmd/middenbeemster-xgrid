@@ -64,7 +64,7 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 ## 5. 🛠️ Aanpak / Werkwijze
 **Methodiek:** Scrum  
 **Sprints:** 10 weken → 10 sprints  
-**Sprint meeting:** Elke woensdag om 14:30  
+**Sprint meeting:** Elke woensdag om de 2 weken om 14:30  
 **Standup:** Elke dag om 09:30  
 
 **Tools:**  
@@ -72,7 +72,8 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 - Figma  
 - Unity  
 - Vue  
-- MariaDB  
+- MariaDB
+- Sam  
 
 **Workflow:**  
 1. Taken worden aangemaakt in GitHub (issues)  
