@@ -1,6 +1,6 @@
-CREATE DATABASE `middenbeemster-Smidse`;
+CREATE DATABASE `middenbeemster_Smidse`;
 
-USE `middenbeemster-Smidse`;
+USE `middenbeemster_Smidse`;
 
 CREATE TABLE UserAdmin (
     'id' INT PRIMARY KEY AUTO_INCREMENT,
