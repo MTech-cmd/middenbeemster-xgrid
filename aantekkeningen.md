@@ -67,17 +67,8 @@ Converten van ply
 
 Voluma.ai als server host
 
-1 Doel..
-Webgebaseerde > websitegeba..
-
 Mobile ready experience
 Nav
-
-Stakeholders
-Jasper erbij zetten
-Arno
-Randy
-Twoine
 
 Jasper voegen in teams call
 Googlemeet aanmaken
@@ -85,9 +76,6 @@ Googlemeet aanmaken
 Verschillende 3d ervaringen die in browser werken en samen te mengen en koppelen
 
 Fullscreen optie voor de 3d experience
-
-9
-Oplevering + overdracht voor nieuwe studenten
 
 Niet openbaar, alleen wij en gemeente
 In chatgpt, dit zijn de partijen, genereer en license.
