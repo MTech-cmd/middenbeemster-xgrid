@@ -16,7 +16,7 @@ Dit project richt zich op het ontwikkelen van een interactieve 3D-ervaring binne
 
 ## 2. 🎯 Doel van het project
 **Hoofddoel:**  
-Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusief een interactieve overstromingssimulatie.
+Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster inclusief een interactieve overstromingssimulatie.
 
 **Subdoelen:**  
 - Implementeren van een interactieve kaart (top-down view)  
@@ -58,6 +58,10 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 | Aryan    | Front-end / Unity | Hoog   |
 | Jarno    | Unity             | Hoog   |
 | Mehdi    | Back-end / Unity  | Hoog   |
+| Jasper   | Eigenaar          | Hoog   |
+| Arno     | Toezichthouder    | Hoog   |
+| Randy    | Developer         | Hoog   |
+| Twoine   | Mede Eigenaar     | Hoog   |
 
 ---
 
@@ -131,7 +135,7 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 | 3 | Navigatie & map | Week 5–6 |
 | 4 | Overstromingssimulatie | Week 7–8 |
 | 5 | Optimalisatie & testen | Week 9 |
-| 6 | Oplevering | 11 juni 2026 |
+| 6 | Oplevering en overdracht voor nieuwe studenten | 11 juni 2026 |
 
 ---
 
