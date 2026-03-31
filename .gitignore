@@ -8,6 +8,7 @@
 /server/package-lock.json
 
 # Front-end
+/client/dist
 # Node
 /client/node_modules
 /client/package-lock.json
