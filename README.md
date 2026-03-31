@@ -37,7 +37,9 @@ http://localhost:3000/api
 
 ##  Endpoints
 
-##  Content ophalen
+/api/content
+/api/auth
+/
 
 ### Alles ophalen
 
@@ -54,7 +56,11 @@ GET /api/content
     "Location": "home",
     "ApiName": "homepage",
     "Content": "Welkom!",
-    "Type": "text"
+    "Type": "text",
+    "PublishedBy": "admin",
+    "LastEditedBy": "",
+    "CreatedAt": "2026-03-24T11:22:13.000Z",
+    "UpdatedAt": "2026-03-24T11:22:13.000Z"
   }
 ]
 ```
@@ -71,51 +77,6 @@ GET /api/content/:apiName
 
 ```
 GET /api/content/homepage
-```
-
----
-
-##  Content toevoegen
-
-```
-POST /api/content
-```
-
- Body:
-
-```json
-{
-  "Location": "home",
-  "ApiName": "homepage",
-  "Content": "Nieuwe tekst",
-  "Type": "text",
-  "PublishedBy": "admin"
-}
-```
-
----
-
-## Content updaten
-
-```
-PUT /api/content/:id
-```
-
- Body:
-
-```json
-{
-  "Content": "Aangepaste tekst",
-  "lastEditedBy": "admin"
-}
-```
-
----
-
-## Content verwijderen
-
-```
-DELETE /api/content/:id
 ```
 
 ---
@@ -137,7 +98,15 @@ POST /api/auth/login
 
 ---
 
-##  Vue gebruik
+#  Vue gebruik
+
+## Axios installeren
+
+```bash
+npm install axios
+```
+
+---
 
 ## Data ophalen
 
@@ -154,7 +123,7 @@ console.log(res.data);
 
 ## Vue component voorbeeld
 
-```html
+```vue
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
@@ -194,23 +163,6 @@ CORS staat aan in Express:
 
 ```js
 app.use(cors());
-```
-
----
-
-## Poorten
-
-* Vue → `http://localhost:5173`
-* API → `http://localhost:3000`
-
----
-
-## Database connectie
-
-Staat in:
-
-```
-/server/db.js
 ```
 
 ---

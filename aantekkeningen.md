@@ -37,3 +37,48 @@ JavaScript
 # Website
 De pagina zal randinformatie bevatten over de 3D ervaring en vervolgens kan de gebruiker naar beneden scrollen voor de ervaring (Met een knop om meteen naar de ervaring toe te gaan.)
 Verder kan ook een pagina gemaakt worden om simpel te navigeren door alle punten van interesses. (Zie voor inspo discover.matterport.com)
+
+Onze website mag horen bij de visitbeemster
+
+Donker groen is nice
+Het moet lijken op de visitbeemster pagina, het moet er bij passen
+
+Design wise kan het zo blijven
+Alleen kleuren van de website
+
+Navbar mobile maken
+Hele pagina eigenlijk
+
+Experience in de hero
+Info eronder
+
+Design is al goed
+4e design voorbeeld maken
+
+Github pages ervan maken 
+
+Andere websites opzoeken die van beemster zijn en inspiratie zoeken en ervoor zorgen dat het aansluit op elkaar
+
+Spark three.js
+
+Supersplt/editor
+.splat
+Converten van ply
+
+Voluma.ai als server host
+
+Mobile ready experience
+Nav
+
+Jasper voegen in teams call
+Googlemeet aanmaken
+
+Verschillende 3d ervaringen die in browser werken en samen te mengen en koppelen
+
+Fullscreen optie voor de 3d experience
+
+Niet openbaar, alleen wij en gemeente
+In chatgpt, dit zijn de partijen, genereer en license.
+
+Admin pagina maken voor frontend
+/admin en inloggen en dingen bewerken zoals tekstjes
