@@ -1,7 +1,7 @@
 #!/bin/bash
+export $(grep -v '^#' ../../.env | xargs)
 
 echo "🚀 Starting DB stack..."
-
 cd "$(dirname "$0")/.."
 
 docker compose --env-file ../../.env up -d
