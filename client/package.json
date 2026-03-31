@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
-    "scratch": "git add . && git commit -m 'committed and pushed using Node script for GH Pages' --allow-empty && git push && npm i && vite build && gh-pages -d dist"
+    "scratch": "git fetch && git pull && git add . && git commit -m 'Pushed using NPM Script' && git push && npm i && vite build && gh-pages -d dist"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
-    "gh-pages": "^6.3.0",
     "vite": "^7.2.4"
   }
 }
