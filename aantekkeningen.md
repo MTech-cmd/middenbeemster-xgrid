@@ -55,8 +55,6 @@ Info eronder
 Design is al goed
 4e design voorbeeld maken
 
-Github pages ervan maken 
-
 Andere websites opzoeken die van beemster zijn en inspiratie zoeken en ervoor zorgen dat het aansluit op elkaar
 
 Spark three.js
