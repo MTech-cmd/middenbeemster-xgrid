@@ -154,22 +154,33 @@ Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster incl
 
 **Algemene navigatie**
 - Als gebruiker wil ik vrij kunnen rondlopen in de 3D-wereld, zodat ik de omgeving kan verkennen.  
+  **Priority:** High  
 - Als gebruiker wil ik via een kaart locaties kunnen selecteren, zodat ik snel kan navigeren.  
+  **Priority:** High  
 - Als gebruiker wil ik kunnen teleporteren tussen locaties, zodat ik tijd bespaar.  
+  **Priority:** High  
 
 **Interactie & beleving**
 - Als gebruiker wil ik gebouwen kunnen betreden, zodat ik meer details kan ontdekken.  
+  **Priority:** Medium  
 - Als gebruiker wil ik interactieve informatiepunten zien, zodat ik meer leer over erfgoed.  
+  **Priority:** High  
 - Als gebruiker wil ik een drone/top-down view kunnen gebruiken, zodat ik overzicht heb.  
+  **Priority:** Medium  
 
 **Simulatie**
 - Als gebruiker wil ik een overstromingssimulatie kunnen starten, zodat ik de impact kan zien.  
+  **Priority:** High  
 - Als gebruiker wil ik visuele effecten zoals water en vissen zien, zodat de ervaring realistischer is.  
+  **Priority:** Medium  
 
 **Gebruiksvriendelijkheid**
 - Als gebruiker wil ik de website zonder installatie kunnen gebruiken, zodat deze toegankelijk is.  
+  **Priority:** High  
 - Als gebruiker wil ik een duidelijke interface, zodat ik makkelijk mijn weg vind.  
+  **Priority:** High  
 - Als gebruiker wil ik dat de applicatie geschikt is voor alle leeftijden, zodat iedereen het kan gebruiken.  
+  **Priority:** Medium  
 
 ---
 
