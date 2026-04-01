@@ -163,7 +163,7 @@ Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster incl
 **Interactie & beleving**
 - Als gebruiker wil ik gebouwen kunnen betreden, zodat ik meer details kan ontdekken.  
   **Priority:** Medium  
-- Als gebruiker wil ik interactieve informatiepunten zien, zodat ik meer leer over erfgoed.  
+- Als gebruiker wil ik interactieve informatiepunten zien, zodat ik meer leer over de smidse.  
   **Priority:** High  
 - Als gebruiker wil ik een drone/top-down view kunnen gebruiken, zodat ik overzicht heb.  
   **Priority:** Medium  
