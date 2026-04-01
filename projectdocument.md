@@ -76,7 +76,7 @@ Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster incl
 - Figma  
 - Unity  
 - Vue  
-- MariaDB
+- MariaDB  
 - Sam  
 
 **Workflow:**  
@@ -150,7 +150,30 @@ Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster incl
 
 ---
 
-## 11. ✅ Deliverables
+## 11. 📖 User Stories
+
+**Algemene navigatie**
+- Als gebruiker wil ik vrij kunnen rondlopen in de 3D-wereld, zodat ik de omgeving kan verkennen.  
+- Als gebruiker wil ik via een kaart locaties kunnen selecteren, zodat ik snel kan navigeren.  
+- Als gebruiker wil ik kunnen teleporteren tussen locaties, zodat ik tijd bespaar.  
+
+**Interactie & beleving**
+- Als gebruiker wil ik gebouwen kunnen betreden, zodat ik meer details kan ontdekken.  
+- Als gebruiker wil ik interactieve informatiepunten zien, zodat ik meer leer over erfgoed.  
+- Als gebruiker wil ik een drone/top-down view kunnen gebruiken, zodat ik overzicht heb.  
+
+**Simulatie**
+- Als gebruiker wil ik een overstromingssimulatie kunnen starten, zodat ik de impact kan zien.  
+- Als gebruiker wil ik visuele effecten zoals water en vissen zien, zodat de ervaring realistischer is.  
+
+**Gebruiksvriendelijkheid**
+- Als gebruiker wil ik de website zonder installatie kunnen gebruiken, zodat deze toegankelijk is.  
+- Als gebruiker wil ik een duidelijke interface, zodat ik makkelijk mijn weg vind.  
+- Als gebruiker wil ik dat de applicatie geschikt is voor alle leeftijden, zodat iedereen het kan gebruiken.  
+
+---
+
+## 12. ✅ Deliverables
 - Werkende website  
 - 3D experience (Unity WebGL)  
 - Overstromingssimulatie  
@@ -162,7 +185,7 @@ Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster incl
 
 ---
 
-## 12. 📊 Evaluatie
+## 13. 📊 Evaluatie
 Het project is geslaagd wanneer:  
 - Alle functionaliteiten werken zoals beschreven  
 - De 3D experience soepel draait in de browser  
