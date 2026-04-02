@@ -40,7 +40,7 @@ const menuOpen = ref(false)
   left: 0;
   right: 0;
   z-index: 100;
-  background-color: #1c2b1c;
+  background-color: #009A47;
   padding: 0 1.25rem;
   height: 60px;
 }
@@ -70,7 +70,7 @@ const menuOpen = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1c2b1c;
+  color: white;
   flex-shrink: 0;
 }
 
@@ -123,10 +123,10 @@ const menuOpen = ref(false)
   top: 60px;
   left: -1.25rem;
   right: -1.25rem;
-  background-color: #1c2b1c;
+  background-color: #009A47;
   padding: 0.5rem 1.25rem 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-links.open {
@@ -134,13 +134,13 @@ const menuOpen = ref(false)
 }
 
 .nav-link {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-size: 1rem;
   font-family: 'Inter', sans-serif;
   transition: color 0.2s;
   padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .nav-link:hover {
@@ -149,7 +149,7 @@ const menuOpen = ref(false)
 
 .nav-btn {
   background-color: #c9a55a;
-  color: #1c2b1c;
+  color: white;
   padding: 0.75rem 1.1rem;
   border-radius: 8px;
   font-size: 0.95rem;

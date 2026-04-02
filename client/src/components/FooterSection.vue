@@ -32,7 +32,7 @@
 
 <style scoped>
 .footer {
-  background-color: #1c2b1c;
+  background-color: #009A47;
   padding: 2rem 1.25rem;
 }
 
@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1c2b1c;
+  color: white;
   flex-shrink: 0;
 }
 

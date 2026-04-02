@@ -292,8 +292,8 @@ const activeCard = ref('info')
 }
 
 .game-badge {
-  background-color: rgba(28, 60, 28, 0.85);
-  color: #8fce8f;
+  background-color: rgba(0, 154, 71, 0.85);
+  color: white;
   letter-spacing: 0.05em;
   font-size: 0.68rem;
 }
@@ -314,7 +314,7 @@ const activeCard = ref('info')
 .game-info-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10, 20, 10, 0.92) 0%, rgba(10, 20, 10, 0.5) 55%, rgba(10, 20, 10, 0.2) 100%);
+  background: linear-gradient(to top, rgba(0, 60, 25, 0.92) 0%, rgba(0, 60, 25, 0.5) 55%, rgba(0, 60, 25, 0.2) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -340,9 +340,9 @@ const activeCard = ref('info')
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background-color: rgba(143, 206, 143, 0.15);
-  border: 1px solid rgba(143, 206, 143, 0.3);
-  color: #8fce8f;
+  background-color: rgba(0, 154, 71, 0.2);
+  border: 1px solid rgba(0, 154, 71, 0.5);
+  color: #009A47;
   padding: 0.22rem 0.6rem;
   border-radius: 20px;
   font-size: 0.68rem;
@@ -414,8 +414,8 @@ const activeCard = ref('info')
 }
 
 .ervaring-pct {
-  background-color: #e8f5e8;
-  color: #2d6a2d;
+  background-color: rgba(0, 154, 71, 0.12);
+  color: #009A47;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.2rem 0.5rem;
@@ -468,7 +468,7 @@ const activeCard = ref('info')
 
 .start-btn {
   width: 100%;
-  background-color: #243524;
+  background-color: #009A47;
   color: white;
   border: none;
   padding: 0.85rem;
@@ -481,12 +481,14 @@ const activeCard = ref('info')
 }
 
 .start-btn:hover {
-  background-color: #1c2b1c;
+  background-color: #007a38;
 }
+
+
 
 /* Game Card */
 .game-card {
-  background-color: #1e2e1e;
+  background-color: #009A47;
   display: flex;
   flex-direction: column;
 }
@@ -505,8 +507,8 @@ const activeCard = ref('info')
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(10, 22, 10, 0.45) 0%,
-    rgba(10, 22, 10, 0.88) 100%
+    rgba(0, 60, 25, 0.45) 0%,
+    rgba(0, 60, 25, 0.88) 100%
   );
   padding: 1.2rem 1.8rem 1.4rem;
   display: flex;
@@ -525,9 +527,9 @@ const activeCard = ref('info')
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: rgba(143, 206, 143, 0.12);
-  border: 1px solid rgba(143, 206, 143, 0.25);
-  color: #8fce8f;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: white;
   padding: 0.28rem 0.75rem;
   border-radius: 20px;
   font-size: 0.68rem;
@@ -551,7 +553,7 @@ const activeCard = ref('info')
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #5cb85c;
+  background-color: #009A47;
   animation: pulse 2s infinite;
 }
 
@@ -634,8 +636,8 @@ const activeCard = ref('info')
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 0.75rem 1rem;
   border-radius: 8px;
 }
@@ -645,7 +647,7 @@ const activeCard = ref('info')
   height: 8px;
   min-width: 8px;
   border-radius: 50%;
-  background-color: #5cb85c;
+  background-color: #009A47;
   margin-top: 4px;
 }
 
@@ -665,7 +667,7 @@ const activeCard = ref('info')
 
 .start-wandeling-btn {
   width: 100%;
-  background-color: #2d4d2d;
+  background-color: #c9a55a;
   color: white;
   border: none;
   padding: 0.85rem;
@@ -678,7 +680,7 @@ const activeCard = ref('info')
 }
 
 .start-wandeling-btn:hover {
-  background-color: #3a6a3a;
+  background-color: #b8923f;
 }
 
 /* Desktop: twee kolommen naast elkaar */

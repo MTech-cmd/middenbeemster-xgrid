@@ -78,10 +78,10 @@ function startExperience() {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(5, 15, 5, 0.97) 0%,
-    rgba(5, 15, 5, 0.75) 40%,
-    rgba(5, 15, 5, 0.2) 70%,
-    rgba(5, 15, 5, 0.05) 100%
+    rgba(0, 60, 25, 0.97) 0%,
+    rgba(0, 60, 25, 0.75) 40%,
+    rgba(0, 60, 25, 0.2) 70%,
+    rgba(0, 60, 25, 0.05) 100%
   );
 }
 
@@ -275,9 +275,9 @@ function startExperience() {
   .hero-overlay {
     background: linear-gradient(
       to right,
-      rgba(10, 20, 10, 0.9) 0%,
-      rgba(10, 20, 10, 0.72) 55%,
-      rgba(10, 20, 10, 0.45) 100%
+      rgba(0, 60, 25, 0.9) 0%,
+      rgba(0, 60, 25, 0.72) 55%,
+      rgba(0, 60, 25, 0.45) 100%
     );
   }
 
