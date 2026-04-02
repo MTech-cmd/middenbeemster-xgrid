@@ -49,17 +49,18 @@ onMounted(async () => {
 <style scoped>
 .footer {
   background-color: #1c2b1c;
-  padding: 2rem 2rem;
+  padding: 2rem 1.25rem;
 }
 
+/* Mobile-first: gestapeld gecentreerd */
 .footer-inner {
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
+  text-align: center;
+  gap: 1.25rem;
 }
 
 .footer-brand {
@@ -127,13 +128,17 @@ onMounted(async () => {
   color: white;
 }
 
-@media (max-width: 700px) {
-  .footer-inner {
-    flex-direction: column;
-    text-align: center;
+/* Desktop */
+@media (min-width: 700px) {
+  .footer {
+    padding: 2rem;
   }
-  .footer-center {
-    order: -1;
+
+  .footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    gap: 2rem;
   }
 }
 </style>

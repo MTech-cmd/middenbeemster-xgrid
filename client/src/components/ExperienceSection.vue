@@ -9,19 +9,22 @@
         </p>
       </div>
 
-      <!-- Two preview cards -->
-      <div class="cards-preview">
-        <div class="card-preview" @click="activeCard = 'info'" :class="{ active: activeCard === 'info' }">
-          <div class="card-preview-image info-image">
-            <span class="card-badge info-badge">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-              Informatie
-            </span>
-            <div class="card-preview-overlay">
-              <h3 class="card-preview-title">{{ get('5') }}</h3>
+      <!-- Twee kolommen: elke kolom heeft een preview + detail kaart -->
+      <div class="cards-columns" id="tour">
+
+        <!-- Kolom 1: Informatie -->
+        <div class="card-column">
+          <div class="card-preview" @click="activeCard = 'info'" :class="{ active: activeCard === 'info' }">
+            <div class="card-preview-image info-image">
+              <span class="card-badge info-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Informatie
+              </span>
+              <div class="card-preview-overlay">
+                <h3 class="card-preview-title">Midden-Beemster</h3>
+              </div>
             </div>
           </div>
-        </div>
 
         <div class="card-preview" @click="activeCard = 'game'" :class="{ active: activeCard === 'game' }">
           <div class="card-preview-image game-image">
@@ -57,118 +60,151 @@
               {{ get('13') }}
             </p>
             <a href="#" class="meer-lezen">Meer lezen <span>›</span></a>
+          <div class="detail-card info-card">
+            <div class="info-card-body">
+              <p class="info-intro">
+                Midden-Beemster is een pittoresk dorp in de Beemsterpolder — één van de oudste droogmakerijen ter wereld. Drooggelegd in 1612 en in 1999 aangewezen als UNESCO Werelderfgoed, staat de Beemster bekend om zijn unieke rechthoekige landschapspatroon en rijke landbouwgeschiedenis.
+              </p>
+              <a href="#" class="meer-lezen">Meer lezen <span>›</span></a>
 
-            <div class="ervaring-block">
-              <div class="ervaring-header">
-                <span class="ervaring-label">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                  {{ get('14') }}
-                </span>
-                <span class="ervaring-pct">{{ get('15') }}</span>
+              <div class="ervaring-block">
+                <div class="ervaring-header">
+                  <span class="ervaring-label">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    OVER DE 3D ERVARING
+                  </span>
+                  <span class="ervaring-pct">70%</span>
+                </div>
+
+                <p class="ervaring-text">
+                  Dankzij geavanceerde 3D-scanningtechnologie is Midden-Beemster volledig digitaal vastgelegd. Loop door historische gebouwen, bekijk details van eeuwenoude architectuur en ontdek verhalen die verborgen zijn in de muren.
+                </p>
+
+                <div class="features-grid">
+                  <div class="feature-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/></svg>
+                    360° rondlopen
+                  </div>
+                  <div class="feature-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                    Object interacties
+                  </div>
+                  <div class="feature-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                    Meerdere locaties
+                  </div>
+                  <div class="feature-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Tijdreizen
+                  </div>
+                </div>
+
+                <div class="stars">
+                  <span class="star" v-for="i in 5" :key="i">★</span>
+                  <span class="stars-label">Unieke digitale erfgoed ervaring</span>
+                </div>
+
+                <button class="start-btn">▶ Start de 3D Tour</button>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <p class="ervaring-text">
-                {{ get('16') }}
+        <!-- Kolom 2: 3D Game -->
+        <div class="card-column">
+          <div class="card-preview" @click="activeCard = 'game'" :class="{ active: activeCard === 'game' }">
+            <div class="card-preview-image game-image">
+              <span class="card-badge game-badge">3D INTERACTIEF</span>
+              <div class="card-preview-overlay game-info-overlay">
+                <h3 class="card-preview-title">3D Scan Ervaring</h3>
+                <p class="game-preview-desc">Loop door historische gebouwen van Midden-Beemster, klik op objecten en reis terug in de tijd.</p>
+                <div class="game-preview-tags">
+                  <span class="game-preview-tag">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+                    360° Rondlopen
+                  </span>
+                  <span class="game-preview-tag">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Tijdreizen
+                  </span>
+                  <span class="game-preview-tag">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Interacties
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="spelen" class="detail-card game-card">
+            <div class="game-card-photo-header">
+              <div class="game-card-photo-overlay">
+                <div class="game-card-info-top">
+                  <span class="game-card-info-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    3D SCAN ERVARING
+                  </span>
+                  <span class="game-card-info-live">
+                    <span class="live-dot"></span>
+                    LIVE
+                  </span>
+                </div>
+                <h3 class="game-card-info-title">Betreedt Midden-Beemster</h3>
+                <p class="game-card-info-sub">Volledig interactieve 3D scan omgeving</p>
+                <div class="game-card-info-stats">
+                  <div class="info-stat">
+                    <span class="info-stat-value">360°</span>
+                    <span class="info-stat-label">Rondlopen</span>
+                  </div>
+                  <div class="info-stat-divider"></div>
+                  <div class="info-stat">
+                    <span class="info-stat-value">4K</span>
+                    <span class="info-stat-label">Kwaliteit</span>
+                  </div>
+                  <div class="info-stat-divider"></div>
+                  <div class="info-stat">
+                    <span class="info-stat-value">1612</span>
+                    <span class="info-stat-label">Tijdperk</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="game-card-body">
+              <p class="game-intro">
+                Stap in een levensechte digitale reconstructie van Midden-Beemster. Verken gebouwen van binnenuit, klik op historische objecten voor verborgen verhalen en maak een reis door de tijd.
               </p>
 
-              <div class="features-grid">
-                <div class="feature-item">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/></svg>
-                  {{ get('17') }}
+              <div class="game-features">
+                <div class="game-feature">
+                  <span class="game-feature-dot"></span>
+                  <div>
+                    <p class="game-feature-title">Vrij rondlopen</p>
+                    <p class="game-feature-sub">Navigeer door elk gebouw en elke straat</p>
+                  </div>
                 </div>
-                <div class="feature-item">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                  {{ get('18') }}
+                <div class="game-feature">
+                  <span class="game-feature-dot"></span>
+                  <div>
+                    <p class="game-feature-title">Object interacties</p>
+                    <p class="game-feature-sub">Klik op historische objecten voor informatie</p>
+                  </div>
                 </div>
-                <div class="feature-item">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
-                  {{ get('19') }}
-                </div>
-                <div class="feature-item">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {{ get('20') }}
+                <div class="game-feature">
+                  <span class="game-feature-dot"></span>
+                  <div>
+                    <p class="game-feature-title">Meerdere tijdperken</p>
+                    <p class="game-feature-sub">Zie hoe Beemster veranderde door de eeuwen</p>
+                  </div>
                 </div>
               </div>
 
-              <div class="stars">
-                <span class="star" v-for="i in 5" :key="i">★</span>
-                <span class="stars-label">{{ get('21') }}</span>
-              </div>
-
-              <button id="tour" class="start-btn">{{ get('22') }}</button>
+              <button class="start-wandeling-btn">▶ Start 3D Wandeling</button>
             </div>
           </div>
         </div>
 
-        <!-- 3D Game Card -->
-        <div id="spelen" class="detail-card game-card">
-          <div class="game-card-photo-header">
-            <div class="game-card-photo-overlay">
-              <div class="game-card-info-top">
-                <span class="game-card-info-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                  {{ get('23') }}
-                </span>
-                <span class="game-card-info-live">
-                  <span class="live-dot"></span>
-                  {{ get('24') }}
-                </span>
-              </div>
-              <h3 class="game-card-info-title">{{ get('25') }}</h3>
-              <p class="game-card-info-sub">{{ get('26') }}</p>
-              <div class="game-card-info-stats">
-                <div class="info-stat">
-                  <span class="info-stat-value">{{ get('27') }}</span>
-                  <span class="info-stat-label">{{ get('28') }}</span>
-                </div>
-                <div class="info-stat-divider"></div>
-                <div class="info-stat">
-                  <span class="info-stat-value">{{ get('29') }}</span>
-                  <span class="info-stat-label">{{ get('30') }}</span>
-                </div>
-                <div class="info-stat-divider"></div>
-                <div class="info-stat">
-                  <span class="info-stat-value">{{ get('31') }}</span>
-                  <span class="info-stat-label">{{ get('32') }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="game-card-body">
-            <p class="game-intro">
-              {{ get('33') }}
-            </p>
-
-            <div class="game-features">
-              <div class="game-feature">
-                <span class="game-feature-dot"></span>
-                <div>
-                  <p class="game-feature-title">{{ get('34') }}</p>
-                  <p class="game-feature-sub">{{ get('35') }}</p>
-                </div>
-              </div>
-              <div class="game-feature">
-                <span class="game-feature-dot"></span>
-                <div>
-                  <p class="game-feature-title">{{ get('36') }}</p>
-                  <p class="game-feature-sub">{{ get('37') }}</p>
-                </div>
-              </div>
-              <div class="game-feature">
-                <span class="game-feature-dot"></span>
-                <div>
-                  <p class="game-feature-title">{{ get('38') }}</p>
-                  <p class="game-feature-sub">{{ get('39') }}</p>
-                </div>
-              </div>
-            </div>
-
-            <button class="start-wandeling-btn">{{ get('40') }}</button>
-          </div>
-        </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -193,7 +229,7 @@ onMounted(async () => {
 <style scoped>
 .experience-section {
   background-color: #f4efe6;
-  padding: 5rem 2rem 6rem;
+  padding: 3rem 1.25rem 4rem;
 }
 
 .section-inner {
@@ -203,7 +239,7 @@ onMounted(async () => {
 
 .section-header {
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2rem;
 }
 
 .section-badge {
@@ -237,14 +273,21 @@ onMounted(async () => {
   font-family: 'Inter', sans-serif;
 }
 
-/* Preview Cards */
-.cards-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem;
-  margin-bottom: 2rem;
+/* Mobile-first: kolommen onder elkaar */
+.cards-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
+/* Elke kolom: preview + detail kaart gestapeld */
+.card-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Preview Cards */
 .card-preview {
   border-radius: 12px;
   overflow: hidden;
@@ -254,12 +297,12 @@ onMounted(async () => {
 
 .card-preview:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .card-preview-image {
   position: relative;
-  height: 280px;
+  height: 200px;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -303,7 +346,7 @@ onMounted(async () => {
 
 .card-preview-overlay {
   padding: 1.2rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
 }
 
 .card-preview-title {
@@ -317,7 +360,7 @@ onMounted(async () => {
 .game-info-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10,20,10,0.92) 0%, rgba(10,20,10,0.5) 55%, rgba(10,20,10,0.2) 100%);
+  background: linear-gradient(to top, rgba(10, 20, 10, 0.92) 0%, rgba(10, 20, 10, 0.5) 55%, rgba(10, 20, 10, 0.2) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -325,7 +368,7 @@ onMounted(async () => {
 }
 
 .game-preview-desc {
-  color: rgba(255,255,255,0.72);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.78rem;
   line-height: 1.5;
   font-family: 'Inter', sans-serif;
@@ -354,16 +397,10 @@ onMounted(async () => {
 }
 
 /* Detail Cards */
-.cards-detail {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem;
-}
-
 .detail-card {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Info Card */
@@ -500,7 +537,6 @@ onMounted(async () => {
   flex-direction: column;
 }
 
-/* Photo header for game card */
 .game-card-photo-header {
   position: relative;
   height: 200px;
@@ -550,7 +586,7 @@ onMounted(async () => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -579,7 +615,7 @@ onMounted(async () => {
 }
 
 .game-card-info-sub {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.78rem;
   font-family: 'Inter', sans-serif;
   margin-bottom: 1rem;
@@ -605,7 +641,7 @@ onMounted(async () => {
 }
 
 .info-stat-label {
-  color: rgba(255,255,255,0.4);
+  color: rgba(255, 255, 255, 0.4);
   font-size: 0.65rem;
   letter-spacing: 0.06em;
   font-family: 'Inter', sans-serif;
@@ -614,9 +650,8 @@ onMounted(async () => {
 .info-stat-divider {
   width: 1px;
   height: 28px;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
-
 
 .game-card-body {
   padding: 1.5rem 1.8rem 1.8rem;
@@ -626,7 +661,7 @@ onMounted(async () => {
 }
 
 .game-intro {
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.85rem;
   line-height: 1.65;
   margin-bottom: 1.5rem;
@@ -645,8 +680,8 @@ onMounted(async () => {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.75rem 1rem;
   border-radius: 8px;
 }
@@ -669,7 +704,7 @@ onMounted(async () => {
 }
 
 .game-feature-sub {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.76rem;
   font-family: 'Inter', sans-serif;
 }
@@ -692,10 +727,29 @@ onMounted(async () => {
   background-color: #3a6a3a;
 }
 
-@media (max-width: 768px) {
-  .cards-preview,
-  .cards-detail {
-    grid-template-columns: 1fr;
+/* Desktop: twee kolommen naast elkaar */
+@media (min-width: 768px) {
+  .experience-section {
+    padding: 5rem 2rem 6rem;
+  }
+
+  .section-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .cards-columns {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .card-column {
+    flex: 1;
+    gap: 1.2rem;
+  }
+
+  .card-preview-image {
+    height: 280px;
   }
 }
 </style>
