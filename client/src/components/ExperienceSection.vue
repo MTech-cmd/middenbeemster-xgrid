@@ -110,6 +110,10 @@
 
         <!-- Card 3: Play Card -->
         <div class="card card-play" id="spelen">
+          <div class="play-grid">
+            <div class="play-img-wrap">
+              <img :src="beemsterImg" alt="Beemster 3D Scan" class="play-img" />
+            </div>
           <div class="play-inner">
             <div class="play-label">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -145,6 +149,7 @@
               Start 3D Wandeling
             </button>
           </div>
+          </div>
         </div>
 
       </div>
@@ -153,6 +158,7 @@
 </template>
 
 <script setup>
+import beemsterImg from '../assets/beemster.png'
 </script>
 
 <style scoped>
@@ -365,14 +371,35 @@
   border-color: #c9a55a;
 }
 
+.play-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.play-img-wrap {
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: #1c2b1c;
+}
+
+.play-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.card-play:hover .play-img {
+  transform: scale(1.04);
+}
+
 .play-inner {
   padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 720px;
-  margin: 0 auto;
 }
 
 .play-label {
@@ -474,8 +501,17 @@
     aspect-ratio: auto;
   }
 
+  .play-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .play-img-wrap {
+    aspect-ratio: auto;
+  }
+
   .play-inner {
-    padding: 3.5rem 2.5rem;
+    padding: 3rem 2.5rem;
+    justify-content: center;
   }
 }
 </style>
