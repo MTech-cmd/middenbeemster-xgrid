@@ -10,17 +10,34 @@
             <rect x="14" y="14" width="7" height="7"/>
           </svg>
         </div>
-        <span class="navbar-title">Midden-Beemster</span>
+        <span class="navbar-title">{{ get('1') }}</span>
       </a>
 
       <div class="navbar-links">
-        <a href="#ontdekken" class="nav-link">Ontdekken</a>
-        <a href="#tour" class="nav-link">3D Tour</a>
-        <a href="#spelen" class="nav-btn">Speel Nu →</a>
+        <a href="#ontdekken" class="nav-link">{{ get('2') }}</a>
+        <a href="#tour" class="nav-link">{{ get('3') }}</a>
+        <a href="#spelen" class="nav-btn">{{ get('4') }}</a>
       </div>
     </div>
   </nav>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const activeCard = ref('info')
+const data = ref([])
+
+// helper functie
+const get = (id) => {
+  return data.value.find(item => item.ApiName === id)?.Content || ''
+}
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:3000/api/content/NavBar')
+  data.value = await res.json()
+})
+</script>
 
 <style scoped>
 .navbar {

@@ -10,12 +10,12 @@ router.get('/', async (req, res) => {
   res.json(data);
 });
 
-// ophalen op ApiName (handig!)
-router.get('/:apiName', async (req, res) => {
+// ophalen op location
+router.get('/:location', async (req, res) => {
   const conn = await pool.getConnection();
   const data = await conn.query(
-    'SELECT * FROM Content WHERE ApiName = ?',
-    [req.params.apiName]
+    'SELECT * FROM Content WHERE Location = ? ORDER BY ApiName ASC',
+    [req.params.location]
   );
   conn.release();
   res.json(data);
