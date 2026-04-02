@@ -7,12 +7,16 @@ INSERT INTO Content (Location, ApiName, Content, Type, PublishedBy) VALUES
 ('ExperienceSection', '4', '?', 'image', 'admin'),
 ('ExperienceSection', '5', 'Midden-Beemster', 'text', 'admin'),
 ('ExperienceSection', '6', '?', 'image', 'admin'),
+
+
 ('ExperienceSection', '7', '3D INTERACTIEF', 'text', 'admin'),
 ('ExperienceSection', '8', '3D Scan Ervaring', 'text', 'admin'),
 ('ExperienceSection', '9', 'Loop door historische gebouwen van Midden-Beemster, klik op objecten en reis terug in de tijd.', 'text', 'admin'),
 ('ExperienceSection', '10', '360° Rondlopen', 'text', 'admin'),
 ('ExperienceSection', '11', 'Tijdreizen', 'text', 'admin'),
 ('ExperienceSection', '12', 'Interacties', 'text', 'admin'),
+
+
 ('ExperienceSection', '13', 'Midden-Beemster is een pittoresk dorp in de Beemsterpolder — één van de oudste droogmakerijen ter wereld. Drooggelegd in 1612 en in 1999 aangewezen als UNESCO Werelderfgoed, staat de Beemster bekend om zijn unieke rechthoekige landschapspatroon en rijke landbouwgeschiedenis.', 'text', 'admin'),
 ('ExperienceSection', '14', 'OVER DE 3D ERVARING', 'text', 'admin'),
 ('ExperienceSection', '15', '70%', 'text', 'admin'),

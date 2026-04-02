@@ -20,9 +20,9 @@
       </button>
 
       <div class="navbar-links" :class="{ open: menuOpen }">
-        <a href="#ontdekken" class="nav-link" @click="menuOpen = false">Ontdekken</a>
-        <a href="#tour" class="nav-link" @click="menuOpen = false">3D Tour</a>
-        <a href="#spelen" class="nav-btn" @click="menuOpen = false">Speel Nu →</a>
+        <a href="#ontdekken" class="nav-link" @click="menuOpen = false">{{ get('2') }}</a>
+        <a href="#tour" class="nav-link" @click="menuOpen = false">{{ get('3') }}</a>
+        <a href="#spelen" class="nav-btn" @click="menuOpen = false">{{ get('4') }}</a>
       </div>
     </div>
   </nav>

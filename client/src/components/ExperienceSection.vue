@@ -21,49 +21,15 @@
                 Informatie
               </span>
               <div class="card-preview-overlay">
-                <h3 class="card-preview-title">Midden-Beemster</h3>
+                <h3 class="card-preview-title">{{ get('5') }}</h3>
               </div>
             </div>
           </div>
 
-        <div class="card-preview" @click="activeCard = 'game'" :class="{ active: activeCard === 'game' }">
-          <div class="card-preview-image game-image">
-            <span class="card-badge game-badge">3D INTERACTIEF</span>
-            <div class="card-preview-overlay game-info-overlay">
-              <h3 class="card-preview-title">{{ get('8') }}</h3>
-              <p class="game-preview-desc">{{ get('9') }}</p>
-              <div class="game-preview-tags">
-                <span class="game-preview-tag">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-                  {{ get('10') }}
-                </span>
-                <span class="game-preview-tag">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {{ get('11') }}
-                </span>
-                <span class="game-preview-tag">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                  {{ get('12') }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detailed cards side by side -->
-      <div class="cards-detail" id="tour">
-        <!-- Information Card -->
-        <div class="detail-card info-card">
-          <div class="info-card-body">
-            <p class="info-intro">
-              {{ get('13') }}
-            </p>
-            <a href="#" class="meer-lezen">Meer lezen <span>›</span></a>
           <div class="detail-card info-card">
             <div class="info-card-body">
               <p class="info-intro">
-                Midden-Beemster is een pittoresk dorp in de Beemsterpolder — één van de oudste droogmakerijen ter wereld. Drooggelegd in 1612 en in 1999 aangewezen als UNESCO Werelderfgoed, staat de Beemster bekend om zijn unieke rechthoekige landschapspatroon en rijke landbouwgeschiedenis.
+                {{ get('13') }}
               </p>
               <a href="#" class="meer-lezen">Meer lezen <span>›</span></a>
 
@@ -71,40 +37,40 @@
                 <div class="ervaring-header">
                   <span class="ervaring-label">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                    OVER DE 3D ERVARING
+                    {{ get('14') }}
                   </span>
-                  <span class="ervaring-pct">70%</span>
+                  <span class="ervaring-pct">{{ get('15') }}</span>
                 </div>
 
                 <p class="ervaring-text">
-                  Dankzij geavanceerde 3D-scanningtechnologie is Midden-Beemster volledig digitaal vastgelegd. Loop door historische gebouwen, bekijk details van eeuwenoude architectuur en ontdek verhalen die verborgen zijn in de muren.
+                  {{ get('16') }}
                 </p>
 
                 <div class="features-grid">
                   <div class="feature-item">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/></svg>
-                    360° rondlopen
+                    {{ get('17') }}
                   </div>
                   <div class="feature-item">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                    Object interacties
+                    {{ get('18') }}
                   </div>
                   <div class="feature-item">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
-                    Meerdere locaties
+                    {{ get('19') }}
                   </div>
                   <div class="feature-item">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Tijdreizen
+                    {{ get('20') }}
                   </div>
                 </div>
 
                 <div class="stars">
                   <span class="star" v-for="i in 5" :key="i">★</span>
-                  <span class="stars-label">Unieke digitale erfgoed ervaring</span>
+                  <span class="stars-label">{{ get('21') }}</span>
                 </div>
 
-                <button class="start-btn">▶ Start de 3D Tour</button>
+                <button class="start-btn">{{ get('22') }}</button>
               </div>
             </div>
           </div>
@@ -114,22 +80,22 @@
         <div class="card-column">
           <div class="card-preview" @click="activeCard = 'game'" :class="{ active: activeCard === 'game' }">
             <div class="card-preview-image game-image">
-              <span class="card-badge game-badge">3D INTERACTIEF</span>
+              <span class="card-badge game-badge">{{ get('7') }}</span>
               <div class="card-preview-overlay game-info-overlay">
-                <h3 class="card-preview-title">3D Scan Ervaring</h3>
-                <p class="game-preview-desc">Loop door historische gebouwen van Midden-Beemster, klik op objecten en reis terug in de tijd.</p>
+                <h3 class="card-preview-title">{{ get('8') }}</h3>
+                <p class="game-preview-desc">{{ get('9') }}</p>
                 <div class="game-preview-tags">
                   <span class="game-preview-tag">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-                    360° Rondlopen
+                    {{ get('10') }}
                   </span>
                   <span class="game-preview-tag">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Tijdreizen
+                    {{ get('11') }}
                   </span>
                   <span class="game-preview-tag">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                    Interacties
+                    {{ get('12') }}
                   </span>
                 </div>
               </div>
@@ -142,29 +108,29 @@
                 <div class="game-card-info-top">
                   <span class="game-card-info-badge">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                    3D SCAN ERVARING
+                    {{ get('23') }}
                   </span>
                   <span class="game-card-info-live">
                     <span class="live-dot"></span>
-                    LIVE
+                    {{ get('24') }}
                   </span>
                 </div>
-                <h3 class="game-card-info-title">Betreedt Midden-Beemster</h3>
-                <p class="game-card-info-sub">Volledig interactieve 3D scan omgeving</p>
+                <h3 class="game-card-info-title">{{ get('25') }}</h3>
+                <p class="game-card-info-sub">{{ get('26') }}</p>
                 <div class="game-card-info-stats">
                   <div class="info-stat">
-                    <span class="info-stat-value">360°</span>
-                    <span class="info-stat-label">Rondlopen</span>
+                    <span class="info-stat-value">{{ get('27') }}</span>
+                    <span class="info-stat-label">{{ get('28') }}</span>
                   </div>
                   <div class="info-stat-divider"></div>
                   <div class="info-stat">
-                    <span class="info-stat-value">4K</span>
-                    <span class="info-stat-label">Kwaliteit</span>
+                    <span class="info-stat-value">{{ get('29') }}</span>
+                    <span class="info-stat-label">{{ get('30') }}</span>
                   </div>
                   <div class="info-stat-divider"></div>
                   <div class="info-stat">
-                    <span class="info-stat-value">1612</span>
-                    <span class="info-stat-label">Tijdperk</span>
+                    <span class="info-stat-value">{{ get('31') }}</span>
+                    <span class="info-stat-label">{{ get('32') }}</span>
                   </div>
                 </div>
               </div>
@@ -172,34 +138,34 @@
 
             <div class="game-card-body">
               <p class="game-intro">
-                Stap in een levensechte digitale reconstructie van Midden-Beemster. Verken gebouwen van binnenuit, klik op historische objecten voor verborgen verhalen en maak een reis door de tijd.
+                {{ get('33') }}
               </p>
 
               <div class="game-features">
                 <div class="game-feature">
                   <span class="game-feature-dot"></span>
                   <div>
-                    <p class="game-feature-title">Vrij rondlopen</p>
-                    <p class="game-feature-sub">Navigeer door elk gebouw en elke straat</p>
+                    <p class="game-feature-title">{{ get('34') }}</p>
+                    <p class="game-feature-sub">{{ get('35') }}</p>
                   </div>
                 </div>
                 <div class="game-feature">
                   <span class="game-feature-dot"></span>
                   <div>
-                    <p class="game-feature-title">Object interacties</p>
-                    <p class="game-feature-sub">Klik op historische objecten voor informatie</p>
+                    <p class="game-feature-title">{{ get('36') }}</p>
+                    <p class="game-feature-sub">{{ get('37') }}</p>
                   </div>
                 </div>
                 <div class="game-feature">
                   <span class="game-feature-dot"></span>
                   <div>
-                    <p class="game-feature-title">Meerdere tijdperken</p>
-                    <p class="game-feature-sub">Zie hoe Beemster veranderde door de eeuwen</p>
+                    <p class="game-feature-title">{{ get('38') }}</p>
+                    <p class="game-feature-sub">{{ get('39') }}</p>
                   </div>
                 </div>
               </div>
 
-              <button class="start-wandeling-btn">▶ Start 3D Wandeling</button>
+              <button class="start-wandeling-btn">{{ get('40') }}</button>
             </div>
           </div>
         </div>
@@ -208,7 +174,6 @@
     </div>
   </section>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 
