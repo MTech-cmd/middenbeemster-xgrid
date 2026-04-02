@@ -16,7 +16,7 @@ Dit project richt zich op het ontwikkelen van een interactieve 3D-ervaring binne
 
 ## 2. 🎯 Doel van het project
 **Hoofddoel:**  
-Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusief een interactieve overstromingssimulatie.
+Het ontwikkelen van een websitegebaseerde 3D-ervaring van de Middenbeemster inclusief een interactieve overstromingssimulatie.
 
 **Subdoelen:**  
 - Implementeren van een interactieve kaart (top-down view)  
@@ -58,6 +58,10 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 | Aryan    | Front-end / Unity | Hoog   |
 | Jarno    | Unity             | Hoog   |
 | Mehdi    | Back-end / Unity  | Hoog   |
+| Jasper   | Eigenaar          | Hoog   |
+| Arno     | Toezichthouder    | Hoog   |
+| Randy    | Developer         | Hoog   |
+| Twoine   | Mede Eigenaar     | Hoog   |
 
 ---
 
@@ -72,7 +76,7 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 - Figma  
 - Unity  
 - Vue  
-- MariaDB
+- MariaDB  
 - Sam  
 
 **Workflow:**  
@@ -131,7 +135,7 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 | 3 | Navigatie & map | Week 5–6 |
 | 4 | Overstromingssimulatie | Week 7–8 |
 | 5 | Optimalisatie & testen | Week 9 |
-| 6 | Oplevering | 11 juni 2026 |
+| 6 | Oplevering en overdracht voor nieuwe studenten | 11 juni 2026 |
 
 ---
 
@@ -146,7 +150,41 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 
 ---
 
-## 11. ✅ Deliverables
+## 11. 📖 User Stories
+
+**Algemene navigatie**
+- Als gebruiker wil ik vrij kunnen rondlopen in de 3D-wereld, zodat ik de omgeving kan verkennen.  
+  **Priority:** High  
+- Als gebruiker wil ik via een kaart locaties kunnen selecteren, zodat ik snel kan navigeren.  
+  **Priority:** High  
+- Als gebruiker wil ik kunnen teleporteren tussen locaties, zodat ik tijd bespaar.  
+  **Priority:** High  
+
+**Interactie & beleving**
+- Als gebruiker wil ik gebouwen kunnen betreden, zodat ik meer details kan ontdekken.  
+  **Priority:** Medium  
+- Als gebruiker wil ik interactieve informatiepunten zien, zodat ik meer leer over de smidse.  
+  **Priority:** High  
+- Als gebruiker wil ik een drone/top-down view kunnen gebruiken, zodat ik overzicht heb.  
+  **Priority:** Medium  
+
+**Simulatie**
+- Als gebruiker wil ik een overstromingssimulatie kunnen starten, zodat ik de impact kan zien.  
+  **Priority:** High  
+- Als gebruiker wil ik visuele effecten zoals water en vissen zien, zodat de ervaring realistischer is.  
+  **Priority:** Medium  
+
+**Gebruiksvriendelijkheid**
+- Als gebruiker wil ik de website zonder installatie kunnen gebruiken, zodat deze toegankelijk is.  
+  **Priority:** High  
+- Als gebruiker wil ik een duidelijke interface, zodat ik makkelijk mijn weg vind.  
+  **Priority:** High  
+- Als gebruiker wil ik dat de applicatie geschikt is voor alle leeftijden, zodat iedereen het kan gebruiken.  
+  **Priority:** Medium  
+
+---
+
+## 12. ✅ Deliverables
 - Werkende website  
 - 3D experience (Unity WebGL)  
 - Overstromingssimulatie  
@@ -158,7 +196,7 @@ Het ontwikkelen van een webgebaseerde 3D-ervaring van de Middenbeemster inclusie
 
 ---
 
-## 12. 📊 Evaluatie
+## 13. 📊 Evaluatie
 Het project is geslaagd wanneer:  
 - Alle functionaliteiten werken zoals beschreven  
 - De 3D experience soepel draait in de browser  
