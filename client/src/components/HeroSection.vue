@@ -5,13 +5,13 @@
       <div class="hero-left">
         <span class="hero-badge">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-          BEGIN DE ERVARING
+          {{ get('1') }}
         </span>
 
-        <h1 class="hero-title">Begin de <span class="hero-title-accent">3D Ervaring</span></h1>
+        <h1 class="hero-title">{{ get('2') }} <span class="hero-title-accent">{{ get('3') }}</span></h1>
 
         <p class="hero-subtitle">
-          Stap direct in de interactieve 3D scan van Midden-Beemster. Geen download vereist — speel direct in je browser.
+          {{ get('4') }}
         </p>
 
         <div class="hero-play-center">
@@ -24,13 +24,13 @@
         </div>
 
         <div class="hero-tags">
-          <span class="hero-tag">360° Rondlopen</span>
-          <span class="hero-tag">Tijdreizen</span>
-          <span class="hero-tag">Object interacties</span>
-          <span class="hero-tag">Gratis toegang</span>
+          <span class="hero-tag">{{ get('5') }}</span>
+          <span class="hero-tag">{{ get('6') }}</span>
+          <span class="hero-tag">{{ get('7') }}</span>
+          <span class="hero-tag">{{ get('8') }}</span>
         </div>
 
-        <a href="#ontdekken" class="hero-meer-btn" @click.stop>Meer Ontdekken ↓</a>
+        <a href="#ontdekken" class="hero-meer-btn" @click.stop>{{ get('9') }}</a>
       </div>
 
       <!-- Play knop rechts — alleen zichtbaar op desktop -->
@@ -40,7 +40,7 @@
             <svg viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
           </div>
         </div>
-        <p class="hero-play-label">Klik om te starten</p>
+        <p class="hero-play-label">{{ get('10') }}</p>
       </div>
     </div>
 
@@ -53,9 +53,23 @@
 </template>
 
 <script setup>
+const activeCard = ref('info')
+const data = ref([])
+
 function startExperience() {
   alert('De 3D ervaring wordt geladen...')
 }
+import { ref, onMounted } from 'vue'
+
+// helper functie
+const get = (id) => {
+  return data.value.find(item => item.ApiName === id)?.Content || ''
+}
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:3000/api/content/HeroSection')
+  data.value = await res.json()
+})
 </script>
 
 <style scoped>

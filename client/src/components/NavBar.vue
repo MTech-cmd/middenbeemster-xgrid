@@ -10,7 +10,7 @@
             <rect x="14" y="14" width="7" height="7"/>
           </svg>
         </div>
-        <span class="navbar-title">Midden-Beemster</span>
+        <span class="navbar-title">{{ get('1') }}</span>
       </a>
 
       <button class="hamburger" @click="menuOpen = !menuOpen" :class="{ open: menuOpen }" aria-label="Menu openen">
@@ -20,30 +20,29 @@
       </button>
 
       <div class="navbar-links" :class="{ open: menuOpen }">
-        <a href="javascript:void(0)" class="nav-link" @click="scrollTo('ontdekken')">Ontdekken</a>
-        <a href="javascript:void(0)" class="nav-link" @click="scrollTo('tour')">3D Tour</a>
-        <a href="javascript:void(0)" class="nav-btn" @click="scrollTo('spelen')">Speel Nu →</a>
+        <a href="#ontdekken" class="nav-link" @click="menuOpen = false">{{ get('2') }}</a>
+        <a href="#tour" class="nav-link" @click="menuOpen = false">{{ get('3') }}</a>
+        <a href="#spelen" class="nav-btn" @click="menuOpen = false">{{ get('4') }}</a>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
-const menuOpen = ref(false)
+const activeCard = ref('info')
+const data = ref([])
 
-function scrollTo(id) {
-  menuOpen.value = false
-  if (id === 'top') {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    return
-  }
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth' })
-  }
+// helper functie
+const get = (id) => {
+  return data.value.find(item => item.ApiName === id)?.Content || ''
 }
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:3000/api/content/NavBar')
+  data.value = await res.json()
+})
 </script>
 
 <style scoped>

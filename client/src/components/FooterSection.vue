@@ -11,25 +11,41 @@
           </svg>
         </div>
         <div>
-          <p class="footer-brand-name">Midden-Beemster</p>
-          <p class="footer-brand-sub">Digitaal Erfgoed Project</p>
+          <p class="footer-brand-name">{{ get('1') }}</p>
+          <p class="footer-brand-sub">{{ get('2') }}</p>
         </div>
       </div>
 
       <div class="footer-center">
-        <p class="footer-meta">UNESCO Werelderfgoed · Beemster Polder, Noord-Holland</p>
-        <p class="footer-copy">© 2024 Midden-Beemster 3D Scan Project. Alle rechten voorbehouden.</p>
+        <p class="footer-meta">{{ get('3') }}</p>
+        <p class="footer-copy">{{ get('4') }}</p>
       </div>
 
       <div class="footer-links">
-        <a href="#" class="footer-link">Over ons</a>
-        <a href="#" class="footer-link">Contact</a>
-        <a href="#" class="footer-link">Privacy</a>
+        <a href="#" class="footer-link">{{ get('5') }}</a>
+        <a href="#" class="footer-link">{{ get('6') }}</a>
+        <a href="#" class="footer-link">{{ get('7') }}</a>
       </div>
     </div>
   </footer>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const activeCard = ref('info')
+const data = ref([])
+
+// helper functie
+const get = (id) => {
+  return data.value.find(item => item.ApiName === id)?.Content || ''
+}
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:3000/api/content/FooterSection')
+  data.value = await res.json()
+})
+</script>
 <style scoped>
 .footer {
   background-color: #1c2b1c;
