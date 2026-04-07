@@ -47,7 +47,7 @@ import { RouterLink } from 'vue-router'
           </div>
         </RouterLink>
 
-        <!-- Design 2 — externe link, pas URL aan -->
+        <!-- Design 2 — externe link -->
         <a
           href="https://mtech-cmd.github.io/middenbeemster-xgrid/design2/"
           target="_blank"
@@ -79,6 +79,37 @@ import { RouterLink } from 'vue-router'
             </div>
           </div>
         </a>
+
+        <!-- Login card — spans full width on its own row -->
+        <RouterLink to="/login" class="design-card design-card--login">
+          <div class="card-number login-number">↳</div>
+          <div class="card-thumb login-thumb">
+            <div class="thumb-overlay">
+              <svg class="login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+            </div>
+            <!-- Decorative grid lines -->
+            <div class="login-grid" aria-hidden="true">
+              <span v-for="n in 6" :key="n"></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-label">Account</span>
+            <h2 class="card-title">Inloggen</h2>
+            <p class="card-desc">
+              Log in op je account om toegang te krijgen tot de volledige 3D-beleving en persoonlijke instellingen.
+            </p>
+            <div class="card-cta">
+              Naar inloggen
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        </RouterLink>
       </div>
 
       <!-- Footer -->
@@ -124,7 +155,7 @@ import { RouterLink } from 'vue-router'
   gap: 3.5rem;
 }
 
-/* Header */
+/* ── Header ── */
 .landing-header {
   text-align: center;
   display: flex;
@@ -167,7 +198,7 @@ import { RouterLink } from 'vue-router'
   letter-spacing: 0.03em;
 }
 
-/* Cards grid */
+/* ── Cards grid ── */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -181,7 +212,7 @@ import { RouterLink } from 'vue-router'
   }
 }
 
-/* Card */
+/* ── Card base ── */
 .design-card {
   display: flex;
   flex-direction: column;
@@ -202,6 +233,7 @@ import { RouterLink } from 'vue-router'
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 165, 90, 0.1);
 }
 
+/* Design 2 variant */
 .design-card--alt {
   background: rgba(20, 30, 45, 0.4);
   border-color: rgba(130, 170, 220, 0.18);
@@ -212,7 +244,33 @@ import { RouterLink } from 'vue-router'
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(130, 170, 220, 0.1);
 }
 
-/* Card number */
+/* Login variant — spans both columns */
+.design-card--login {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: stretch;
+  background: rgba(28, 22, 38, 0.5);
+  border-color: rgba(180, 140, 220, 0.2);
+}
+
+.design-card--login:hover {
+  border-color: rgba(180, 140, 220, 0.55);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(180, 140, 220, 0.1);
+}
+
+.design-card--login .card-body {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 680px) {
+  .design-card--login {
+    grid-column: auto;
+    flex-direction: column;
+  }
+}
+
+/* ── Card number ── */
 .card-number {
   position: absolute;
   top: 1rem;
@@ -230,7 +288,12 @@ import { RouterLink } from 'vue-router'
   color: rgba(130, 170, 220, 0.12);
 }
 
-/* Thumbnail */
+.login-number {
+  font-size: 2rem;
+  color: rgba(180, 140, 220, 0.15);
+}
+
+/* ── Thumbnail ── */
 .card-thumb {
   width: 100%;
   height: 200px;
@@ -239,12 +302,31 @@ import { RouterLink } from 'vue-router'
   flex-shrink: 0;
 }
 
+/* Login card: fixed-width sidebar thumbnail */
+.design-card--login .card-thumb {
+  width: 260px;
+  height: auto;
+  min-height: 160px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 680px) {
+  .design-card--login .card-thumb {
+    width: 100%;
+    height: 160px;
+  }
+}
+
 .design1-thumb {
   background: linear-gradient(135deg, #1c2b1c 0%, #243524 50%, #2d4d2d 100%);
 }
 
 .design2-thumb {
   background: linear-gradient(135deg, #14202d 0%, #1e3050 50%, #243a5e 100%);
+}
+
+.login-thumb {
+  background: linear-gradient(135deg, #1c1426 0%, #2a1e40 50%, #1e1530 100%);
 }
 
 .thumb-overlay {
@@ -275,12 +357,22 @@ import { RouterLink } from 'vue-router'
   filter: drop-shadow(0 0 12px rgba(130, 170, 220, 0.5));
 }
 
-.design-card:hover .play-icon {
+.login-icon {
+  width: 52px;
+  height: 52px;
+  color: #b48cdc;
+  opacity: 0.75;
+  filter: drop-shadow(0 0 14px rgba(180, 140, 220, 0.55));
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.design-card:hover .play-icon,
+.design-card:hover .login-icon {
   opacity: 1;
   transform: scale(1.12);
 }
 
-/* Decorative shapes in thumbnail */
+/* Decorative dots */
 .thumb-dots {
   position: absolute;
   bottom: 1rem;
@@ -296,14 +388,10 @@ import { RouterLink } from 'vue-router'
   background: rgba(201, 165, 90, 0.5);
 }
 
-.thumb-dots span:nth-child(2) {
-  background: rgba(201, 165, 90, 0.3);
-}
+.thumb-dots span:nth-child(2) { background: rgba(201, 165, 90, 0.3); }
+.thumb-dots span:nth-child(3) { background: rgba(201, 165, 90, 0.15); }
 
-.thumb-dots span:nth-child(3) {
-  background: rgba(201, 165, 90, 0.15);
-}
-
+/* Decorative bars */
 .thumb-shapes {
   position: absolute;
   bottom: 1rem;
@@ -319,16 +407,25 @@ import { RouterLink } from 'vue-router'
   background: rgba(130, 170, 220, 0.4);
 }
 
-.thumb-shapes span:first-child {
-  height: 24px;
+.thumb-shapes span:first-child { height: 24px; }
+.thumb-shapes span:last-child  { height: 16px; background: rgba(130, 170, 220, 0.25); }
+
+/* Decorative grid lines for login thumb */
+.login-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0;
+  pointer-events: none;
 }
 
-.thumb-shapes span:last-child {
-  height: 16px;
-  background: rgba(130, 170, 220, 0.25);
+.login-grid span {
+  border: 1px solid rgba(180, 140, 220, 0.08);
 }
 
-/* Card body */
+/* ── Card body ── */
 .card-body {
   padding: 1.5rem 1.5rem 1.75rem;
   display: flex;
@@ -345,9 +442,8 @@ import { RouterLink } from 'vue-router'
   text-transform: uppercase;
 }
 
-.design-card--alt .card-label {
-  color: #82aadc;
-}
+.design-card--alt .card-label { color: #82aadc; }
+.design-card--login .card-label { color: #b48cdc; }
 
 .card-title {
   font-family: 'Playfair Display', Georgia, serif;
@@ -377,9 +473,8 @@ import { RouterLink } from 'vue-router'
   transition: gap 0.25s ease;
 }
 
-.design-card--alt .card-cta {
-  color: #82aadc;
-}
+.design-card--alt .card-cta   { color: #82aadc; }
+.design-card--login .card-cta { color: #b48cdc; }
 
 .card-cta svg {
   width: 16px;
@@ -387,15 +482,10 @@ import { RouterLink } from 'vue-router'
   transition: transform 0.25s ease;
 }
 
-.design-card:hover .card-cta {
-  gap: 0.75rem;
-}
+.design-card:hover .card-cta     { gap: 0.75rem; }
+.design-card:hover .card-cta svg { transform: translateX(4px); }
 
-.design-card:hover .card-cta svg {
-  transform: translateX(4px);
-}
-
-/* Footer */
+/* ── Footer ── */
 .landing-footer {
   text-align: center;
   color: rgba(244, 239, 230, 0.25);
