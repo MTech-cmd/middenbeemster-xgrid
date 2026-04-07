@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="#" class="navbar-brand">
+      <a href="javascript:void(0)" class="navbar-brand" @click="scrollTo('top')">
         <div class="navbar-logo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/>

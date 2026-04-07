@@ -1,0 +1,66 @@
+name: Deploy beide designs naar GitHub Pages
+
+on:
+  push:
+    branches:
+      - homepageDesign2
+      - showDesign
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Stap 1: Checkout de hoofdbranch (homepageDesign2 / showDesign) ──
+      - name: Checkout hoofdbranch
+        uses: actions/checkout@v4
+
+      - name: Node.js instellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Installeer dependencies (Design 1)
+        run: npm ci
+        working-directory: client
+
+      - name: Bouw Design 1 (landing + huidige design)
+        run: npx vite build --base=/middenbeemster-xgrid/
+        working-directory: client
+
+      - name: Kopieer build naar output map
+        run: mv client/dist ./output
+
+      # ── Stap 2: Checkout testdesign branch en bouw Design 2 ──
+      - name: Checkout testdesign branch
+        uses: actions/checkout@v4
+        with:
+          ref: testdesign
+          path: testdesign-repo
+          clean: false
+
+      - name: Installeer dependencies (Design 2)
+        run: npm ci
+        working-directory: testdesign-repo/client
+
+      - name: Bouw Design 2 (testdesign branch)
+        run: npx vite build --base=/middenbeemster-xgrid/design2/
+        working-directory: testdesign-repo/client
+
+      - name: Kopieer Design 2 naar output/design2
+        run: mv testdesign-repo/client/dist ./output/design2
+
+      # ── Stap 3: Deploy naar gh-pages ──
+      - name: Deploy naar GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          force_orphan: true
