@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="#" class="navbar-brand">
+      <a href="javascript:void(0)" class="navbar-brand" @click="scrollTo('top')">
         <div class="navbar-logo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/>
@@ -20,9 +20,9 @@
       </button>
 
       <div class="navbar-links" :class="{ open: menuOpen }">
-        <a href="#ontdekken" class="nav-link" @click="menuOpen = false">Ontdekken</a>
-        <a href="#tour" class="nav-link" @click="menuOpen = false">3D Tour</a>
-        <a href="#spelen" class="nav-btn" @click="menuOpen = false">Speel Nu →</a>
+        <a href="javascript:void(0)" class="nav-link" @click="scrollTo('ontdekken')">Ontdekken</a>
+        <a href="javascript:void(0)" class="nav-link" @click="scrollTo('tour')">3D Tour</a>
+        <a href="javascript:void(0)" class="nav-btn" @click="scrollTo('spelen')">Speel Nu →</a>
       </div>
     </div>
   </nav>
@@ -30,7 +30,20 @@
 
 <script setup>
 import { ref } from 'vue'
+
 const menuOpen = ref(false)
+
+function scrollTo(id) {
+  menuOpen.value = false
+  if (id === 'top') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return
+  }
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 </script>
 
 <style scoped>
