@@ -76,9 +76,9 @@
             >
               {{ loading ? 'Bezig met inloggen…' : 'Log in' }}
             </button>
-            <router-link class="btn btn-secondary" to="/register">
+            <a class="btn btn-secondary" href="register.html" role="button">
               Account aanmaken
-            </router-link>
+            </a>
           </div>
 
           <div class="meta">

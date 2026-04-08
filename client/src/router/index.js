@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import Design1View from '../views/Design1View.vue'
+import LoginPage from '../views/LoginPage.vue'
+import RegisterView from '../views/RegisterView.vue'
 
 const routes = [
   {
@@ -14,9 +16,19 @@ const routes = [
     component: Design1View,
   },
   {
+    path: '/login',
+    name: 'login',
+    component: LoginPage,
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/',
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+  }
 ]
 
 const router = createRouter({
