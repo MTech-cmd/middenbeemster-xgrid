@@ -1,15 +1,7 @@
 <script setup>
-import NavBar from './components/NavBar.vue'
-import HeroSection from './components/HeroSection.vue'
-import ExperienceSection from './components/ExperienceSection.vue'
-import FooterSection from './components/FooterSection.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <NavBar />
-  <main>
-    <HeroSection />
-    <ExperienceSection />
-  </main>
-  <FooterSection />
+  <RouterView />
 </template>

@@ -1,8 +1,11 @@
 const express = require('express');
+const router = express.Router();
 const cors = require('cors');
 const helmet = require('helmet'); // toevoegen
 
 const app = express();
+app.use(router);
+
 
 // Security headers (CSP)
 app.use(

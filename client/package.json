@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "deploy": "gh-pages -d dist",
     "scratch": "git fetch && git pull && git add . && git commit -m 'Pushed using NPM Script' --allow-empty && git push && npm i && vite build && gh-pages -d dist"
   },
   "dependencies": {

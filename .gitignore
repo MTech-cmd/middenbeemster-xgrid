@@ -1,1 +1,14 @@
+# Root
+.env
+.idea
+
+# Back-end
+# Node
 /server/node_modules
+/server/package-lock.json
+
+# Front-end
+/client/dist
+# Node
+/client/node_modules
+/client/package-lock.json
