@@ -6,7 +6,8 @@ USE `middenbeemster_Smidse`;
 CREATE TABLE UserAdmin (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    passwordHash VARCHAR(255) NOT NULL,
+    role ENUM('admin') DEFAULT 'admin'
 );
 
 CREATE TABLE Content (
