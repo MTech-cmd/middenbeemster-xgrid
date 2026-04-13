@@ -47,8 +47,10 @@ import { RouterLink } from 'vue-router'
           </div>
         </RouterLink>
 
-        <!-- Design 2 -->
-        <RouterLink to="/design2" class="design-card design-card--alt">
+        <!-- Design 2 — externe link -->
+        <RouterLink to="/design2"
+          class="design-card design-card--alt"
+        >
           <div class="card-number">02</div>
           <div class="card-thumb design2-thumb">
             <div class="thumb-overlay">
@@ -86,6 +88,7 @@ import { RouterLink } from 'vue-router'
                 <line x1="15" y1="12" x2="3" y2="12" />
               </svg>
             </div>
+            <!-- Decorative grid lines -->
             <div class="login-grid" aria-hidden="true">
               <span v-for="n in 6" :key="n"></span>
             </div>
@@ -98,37 +101,6 @@ import { RouterLink } from 'vue-router'
             </p>
             <div class="card-cta">
               Naar inloggen
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </div>
-          </div>
-        </RouterLink>
-
-        <!-- Server View card — spans full width -->
-        <RouterLink to="/server" class="design-card design-card--server">
-          <div class="card-number server-number">⚙</div>
-          <div class="card-thumb server-thumb">
-            <div class="thumb-overlay">
-              <svg class="server-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="2" y="2" width="20" height="8" rx="2"/>
-                <rect x="2" y="14" width="20" height="8" rx="2"/>
-                <line x1="6" y1="6" x2="6.01" y2="6" stroke-width="2" stroke-linecap="round"/>
-                <line x1="6" y1="18" x2="6.01" y2="18" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="server-rack" aria-hidden="true">
-              <span v-for="n in 3" :key="n"></span>
-            </div>
-          </div>
-          <div class="card-body">
-            <span class="card-label">Beheer</span>
-            <h2 class="card-title">Server View</h2>
-            <p class="card-desc">
-              Bekijk en beheer de serverinfrastructuur van het Midden-Beemster platform, inclusief status, logs en configuratie-instellingen.
-            </p>
-            <div class="card-cta">
-              Naar server
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
@@ -295,32 +267,6 @@ import { RouterLink } from 'vue-router'
   }
 }
 
-/* Server variant — spans both columns */
-.design-card--server {
-  grid-column: 1 / -1;
-  flex-direction: row;
-  align-items: stretch;
-  background: rgba(18, 28, 36, 0.55);
-  border-color: rgba(80, 180, 200, 0.2);
-}
-
-.design-card--server:hover {
-  border-color: rgba(80, 180, 200, 0.55);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(80, 180, 200, 0.1);
-}
-
-.design-card--server .card-body {
-  flex: 1;
-  justify-content: center;
-}
-
-@media (max-width: 680px) {
-  .design-card--server {
-    grid-column: auto;
-    flex-direction: column;
-  }
-}
-
 /* ── Card number ── */
 .card-number {
   position: absolute;
@@ -344,11 +290,6 @@ import { RouterLink } from 'vue-router'
   color: rgba(180, 140, 220, 0.15);
 }
 
-.server-number {
-  font-size: 2rem;
-  color: rgba(80, 180, 200, 0.15);
-}
-
 /* ── Thumbnail ── */
 .card-thumb {
   width: 100%;
@@ -358,9 +299,8 @@ import { RouterLink } from 'vue-router'
   flex-shrink: 0;
 }
 
-/* Login & server card: fixed-width sidebar thumbnail */
-.design-card--login .card-thumb,
-.design-card--server .card-thumb {
+/* Login card: fixed-width sidebar thumbnail */
+.design-card--login .card-thumb {
   width: 260px;
   height: auto;
   min-height: 160px;
@@ -368,8 +308,7 @@ import { RouterLink } from 'vue-router'
 }
 
 @media (max-width: 680px) {
-  .design-card--login .card-thumb,
-  .design-card--server .card-thumb {
+  .design-card--login .card-thumb {
     width: 100%;
     height: 160px;
   }
@@ -385,10 +324,6 @@ import { RouterLink } from 'vue-router'
 
 .login-thumb {
   background: linear-gradient(135deg, #1c1426 0%, #2a1e40 50%, #1e1530 100%);
-}
-
-.server-thumb {
-  background: linear-gradient(135deg, #0d1e28 0%, #122030 50%, #16293d 100%);
 }
 
 .thumb-overlay {
@@ -428,18 +363,8 @@ import { RouterLink } from 'vue-router'
   transition: opacity 0.3s, transform 0.3s;
 }
 
-.server-icon {
-  width: 52px;
-  height: 52px;
-  color: #50b4c8;
-  opacity: 0.75;
-  filter: drop-shadow(0 0 14px rgba(80, 180, 200, 0.55));
-  transition: opacity 0.3s, transform 0.3s;
-}
-
 .design-card:hover .play-icon,
-.design-card:hover .login-icon,
-.design-card:hover .server-icon {
+.design-card:hover .login-icon {
   opacity: 1;
   transform: scale(1.12);
 }
@@ -497,40 +422,6 @@ import { RouterLink } from 'vue-router'
   border: 1px solid rgba(180, 140, 220, 0.08);
 }
 
-/* Decorative rack units for server thumb */
-.server-rack {
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.server-rack span {
-  display: block;
-  width: 60px;
-  height: 7px;
-  border-radius: 2px;
-  background: rgba(80, 180, 200, 0.25);
-  position: relative;
-}
-
-.server-rack span::before {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(80, 180, 200, 0.6);
-}
-
-.server-rack span:nth-child(2)::before { background: rgba(80, 200, 120, 0.5); }
-.server-rack span:nth-child(3) { width: 48px; opacity: 0.6; }
-
 /* ── Card body ── */
 .card-body {
   padding: 1.5rem 1.5rem 1.75rem;
@@ -548,9 +439,8 @@ import { RouterLink } from 'vue-router'
   text-transform: uppercase;
 }
 
-.design-card--alt .card-label    { color: #82aadc; }
-.design-card--login .card-label  { color: #b48cdc; }
-.design-card--server .card-label { color: #50b4c8; }
+.design-card--alt .card-label { color: #82aadc; }
+.design-card--login .card-label { color: #b48cdc; }
 
 .card-title {
   font-family: 'Playfair Display', Georgia, serif;
@@ -580,9 +470,8 @@ import { RouterLink } from 'vue-router'
   transition: gap 0.25s ease;
 }
 
-.design-card--alt .card-cta    { color: #82aadc; }
-.design-card--login .card-cta  { color: #b48cdc; }
-.design-card--server .card-cta { color: #50b4c8; }
+.design-card--alt .card-cta   { color: #82aadc; }
+.design-card--login .card-cta { color: #b48cdc; }
 
 .card-cta svg {
   width: 16px;

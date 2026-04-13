@@ -3,6 +3,8 @@ import LandingPage from '../views/LandingPage.vue'
 import Design1View from '../views/Design1View.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegisterView from '../views/RegisterView.vue'
+import Design2View from '../views/Design2View.vue'
+import DesignServer from '../views/DesignServer.vue'
 
 const routes = [
   {
@@ -14,6 +16,16 @@ const routes = [
     path: '/design1',
     name: 'design1',
     component: Design1View,
+  },
+  {
+    path: '/design2',
+    name: 'design2',
+    component: Design2View,
+  },
+  {
+    path: '/server',
+    name: 'server',
+    component: DesignServer,
   },
   {
     path: '/login',

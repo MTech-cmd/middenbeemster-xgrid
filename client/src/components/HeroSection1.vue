@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section class="hero" @click="startExperience">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-left">
@@ -21,26 +21,7 @@
           <span class="hero-tag">Gratis toegang</span>
         </div>
 
-      <h1 class="hero-title">Begin de <span class="hero-accent">3D Ervaring</span></h1>
-
-      <p class="hero-subtitle">
-        Ontdek de rijke geschiedenis van Midden-Beemster door een interactieve 3D wereld. Geen download vereist — speel direct in je browser.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="#ontdekken" class="btn-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          Ontdekken
-        </a>
-        <button class="btn-outline" @click="startExperience">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="5,3 19,12 5,21"/>
-          </svg>
-          3D Tour Starten
-        </button>
+        <a href="#ontdekken" class="hero-meer-btn" @click.stop>Meer Ontdekken ↓</a>
       </div>
 
       <div class="hero-right">
@@ -53,7 +34,7 @@
       </div>
     </div>
 
-    <div class="hero-scroll">
+    <div class="hero-scroll-indicator">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
         <path d="M12 5v14M5 12l7 7 7-7"/>
       </svg>
@@ -78,6 +59,7 @@ function startExperience() {
   display: flex;
   align-items: center;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .hero-overlay {
@@ -117,11 +99,11 @@ function startExperience() {
   background-color: rgba(201, 165, 90, 0.15);
   border: 1px solid rgba(201, 165, 90, 0.35);
   color: #c9a55a;
-  padding: 0.45rem 1.1rem;
+  padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   font-family: 'Inter', sans-serif;
   margin-bottom: 1.6rem;
 }
@@ -135,7 +117,7 @@ function startExperience() {
   margin-bottom: 1.4rem;
 }
 
-.hero-accent {
+.hero-title-accent {
   color: #c9a55a;
 }
 
@@ -217,21 +199,16 @@ function startExperience() {
   height: 100px;
   border-radius: 50%;
   background-color: #c9a55a;
-  color: #1c2b1c;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  text-decoration: none;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.2s, transform 0.2s;
   padding-left: 6px;
 }
 
-.btn-primary:hover {
+.hero:hover .hero-play-btn {
   background-color: #b8923f;
-  transform: scale(1.03);
+  transform: scale(1.06);
 }
 
 .hero-play-label {
@@ -254,7 +231,7 @@ function startExperience() {
 
 @keyframes bounce {
   0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(8px); }
+  50% { transform: translateX(-50%) translateY(8px); }
 }
 
 @media (max-width: 768px) {
