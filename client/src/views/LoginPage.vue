@@ -93,6 +93,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const username = ref('')
 const password = ref('')
@@ -124,7 +127,16 @@ async function handleSubmit() {
     if (!response.ok) {
       errorMessage.value = data.error || 'Inloggen mislukt. Controleer je gegevens.'
     } else {
-      alert('Login gelukt!')
+      // 🔐 Token opslaan
+      localStorage.setItem('token', data.token)
+
+      // 👑 Optioneel: role opslaan (voor admin check)
+      if (data.role) {
+        localStorage.setItem('role', data.role)
+      }
+
+      // 🔄 Redirect naar admin pagina
+      router.push('/admin')
     }
   } catch (err) {
     console.error(err)
@@ -133,8 +145,7 @@ async function handleSubmit() {
     loading.value = false
   }
 }
-</script>
-
+</script> 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
 
