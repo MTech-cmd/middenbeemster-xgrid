@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pages</title>
+</head>
+<body>
+    <!-- side bar -->
+    <div id="side_bar">
+        <h1>Admin</h1>
+        <p>pages</p>
+        <p>navbar</p>
+        <p>logout</p>
+    </div>
+    <!-- content -->
+    <div>
+        <!-- welke pages je nu hebt met titel, routing en welek template -->
+        <div id="all_your_pages">
+            <h1>All your pages</h1>
+            <p>{{get('pages')}}</p>
+        </div>
+        <div>
+            <button>Add Page</button>
+        </div>
+    </div>
+</body>
+</html>

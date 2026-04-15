@@ -1,0 +1,36 @@
+3<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pages</title>
+</head>
+<body>
+    <!-- side bar -->
+    <div id="side_bar">
+        <h1>Admin</h1>
+        <p>pages</p>
+        <p>navbar</p>
+        <p>logout</p>
+    </div>
+    <!-- content -->
+    <div>
+        <!-- navbar voorbeeld hou hij nu is -->
+         <div id="navbar_nu">
+            <h1>Navbar now</h1>
+            <p>{{get('navbar')}}</p>
+         </div>
+        <!-- navbar content -->
+        <div id="navbar_content">
+            <h1>Navbar content</h1>
+            <p>{{get('navbar_items')}}</p>
+            <p>{{get('navbar_links')}}</p>
+            <p>edit</p>
+            <p>delete</p>
+        </div>
+        <div>
+            <button>Add navbar item</button>
+        </div>
+    </div>
+</body>
+</html>
