@@ -1,30 +1,364 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin home</title>
-</head>
-<body>
-    <!-- side bar -->
-    <div id="side_bar">
-        <h1>Admin</h1>
-        <p>pages</p>
-        <p>navbar</p>
-        <p>logout</p>
-    </div>
-    <!-- content -->
-     <div>
-        <!-- hoe de navbar er uit ziet -->
-        <div id="all_your_navbar">
-            <h1>All your navbar</h1>
-            <p>{{get('navbar')}}</p>
+<template>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button
+          v-for="item in navItems"
+          :key="item.id"
+          class="nav-item"
+          :class="{ active: activeSection === item.id }"
+          @click="activeSection = item.id"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
+      <button class="logout-btn" @click="logout">
+        <span>↩</span> Logout
+      </button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+      <!-- Navbar preview section -->
+      <section v-if="activeSection === 'navbar'" class="card">
+        <div class="card-header">
+          <h2>Navbar Preview</h2>
+          <span class="badge">Live</span>
         </div>
-        <!-- welke pages je nu hebt met titel en routing -->
-        <div id="all_your_pages">
-            <h1>All your pages</h1>
-            <p>{{get('pages')}}</p>
+        <div class="navbar-preview">
+          <NavBar />
         </div>
-     </div>
-</body>
-</html>
+      </section>
+
+      <!-- Pages section -->
+      <section v-if="activeSection === 'pages'" class="card">
+        <div class="card-header">
+          <h2>All Pages</h2>
+          <span class="badge">{{ pages.length }} pages</span>
+        </div>
+
+        <div v-if="loading" class="state-msg">
+          <span class="spinner"></span> Loading pages...
+        </div>
+
+        <div v-else-if="error" class="state-msg error">
+          ⚠ {{ error }}
+        </div>
+
+        <div v-else-if="pages.length === 0" class="state-msg">
+          No pages found.
+        </div>
+
+        <table v-else class="pages-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Route</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="page in pages" :key="page.id">
+              <td class="id-cell">{{ page.id }}</td>
+              <td>{{ page.title }}</td>
+              <td><code class="route">{{ page.route }}</code></td>
+              <td>
+                <span class="status-badge" :class="page.active ? 'active' : 'inactive'">
+                  {{ page.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import NavBar from '../components/NavBar.vue'
+
+const activeSection = ref('pages')
+const pages = ref([])
+const loading = ref(false)
+const error = ref(null)
+
+const navItems = [
+  { id: 'pages', label: 'Pages', icon: '▤' },
+  { id: 'navbar', label: 'Navbar', icon: '☰' },
+]
+
+async function fetchPages() {
+  loading.value = true
+  error.value = null
+  try {
+    const response = await fetch('http://localhost:3000/api/admin/pages', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Voeg hier je auth header toe indien nodig:
+        // 'Authorization': `Bearer ${token}`
+      },
+    })
+    if (!response.ok) throw new Error(`Server error: ${response.status}`)
+    pages.value = await response.json()
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+
+function logout() {
+  // Voeg hier logout logica toe
+  console.log('Logout')
+}
+
+onMounted(() => {
+  fetchPages()
+})
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Syne', sans-serif;
+  background: #0d0d0f;
+  color: #e8e4dc;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #111114;
+  border-right: 1px solid #222228;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 32px;
+  border-bottom: 1px solid #222228;
+  margin-bottom: 24px;
+}
+
+.logo-icon {
+  font-size: 22px;
+  color: #c8f55a;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #f0ece4;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+}
+
+.nav-item:hover { background: #1a1a20; color: #e8e4dc; }
+.nav-item.active { background: #c8f55a18; color: #c8f55a; }
+
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #2a2a30;
+  background: transparent;
+  color: #666;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+
+.logout-btn:hover { border-color: #ff5555; color: #ff5555; background: #ff555510; }
+
+/* ── Content ── */
+.content {
+  flex: 1;
+  padding: 40px 48px;
+  overflow-y: auto;
+}
+
+/* ── Card ── */
+.card {
+  background: #111114;
+  border: 1px solid #222228;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid #222228;
+}
+
+.card-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0ece4;
+}
+
+.badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: #c8f55a20;
+  color: #c8f55a;
+  border: 1px solid #c8f55a40;
+}
+
+/* ── Navbar preview ── */
+.navbar-preview {
+  padding: 28px;
+  background: #0d0d0f;
+  border-radius: 0 0 14px 14px;
+}
+
+/* ── State messages ── */
+.state-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 28px;
+  color: #666;
+  font-size: 14px;
+}
+
+.state-msg.error { color: #ff5555; }
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #333;
+  border-top-color: #c8f55a;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Table ── */
+.pages-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.pages-table thead tr {
+  border-bottom: 1px solid #222228;
+}
+
+.pages-table th {
+  padding: 12px 28px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.pages-table tbody tr {
+  border-bottom: 1px solid #1a1a20;
+  transition: background 0.1s;
+}
+
+.pages-table tbody tr:last-child { border-bottom: none; }
+.pages-table tbody tr:hover { background: #16161c; }
+
+.pages-table td {
+  padding: 14px 28px;
+  color: #ccc;
+}
+
+.id-cell {
+  font-family: 'DM Mono', monospace;
+  color: #555 !important;
+  font-size: 13px;
+}
+
+.route {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  background: #1a1a20;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #c8f55a;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.status-badge.active {
+  background: #c8f55a18;
+  color: #c8f55a;
+  border: 1px solid #c8f55a40;
+}
+
+.status-badge.inactive {
+  background: #ff555518;
+  color: #ff5555;
+  border: 1px solid #ff555540;
+}
+</style>
