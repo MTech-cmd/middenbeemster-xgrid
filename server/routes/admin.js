@@ -1,94 +1,56 @@
-const express = require('express');
-const router = express.Router();
-const pool = require('../db');
+const BASE_URL = 'http://localhost:3000/api'
 
-// GET /api/admin/pages — alle pagina's ophalen
-router.get('/pages', async (req, res) => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const data = await conn.query('SELECT * FROM Pages');
-    res.json(data);
-  } catch (err) {
-    console.error('Fout bij ophalen pages:', err);
-    res.status(500).json({ error: 'Interne serverfout' });
-  } finally {
-    if (conn) conn.release();
+function getHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    // 'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
-});
+}
 
-// GET /api/admin/pages/:id — één pagina ophalen
-router.get('/pages/:id', async (req, res) => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const data = await conn.query('SELECT * FROM Pages WHERE id = ?', [req.params.id]);
-    if (data.length === 0) {
-      return res.status(404).json({ error: 'Pagina niet gevonden' });
-    }
-    res.json(data[0]);
-  } catch (err) {
-    console.error('Fout bij ophalen page:', err);
-    res.status(500).json({ error: 'Interne serverfout' });
-  } finally {
-    if (conn) conn.release();
+async function request(path, options = {}) {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers: { ...getHeaders(), ...options.headers },
+  })
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}))
+    throw new Error(error.error || `Server error: ${response.status}`)
   }
-});
+  return response.json()
+}
 
-// POST /api/admin/pages — nieuwe pagina aanmaken
-router.post('/pages', async (req, res) => {
-  const { title, route, active } = req.body;
-  if (!title || !route) {
-    return res.status(400).json({ error: 'title en route zijn verplicht' });
-  }
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const result = await conn.query(
-      'INSERT INTO Pages (title, route, active) VALUES (?, ?, ?)',
-      [title, route, active ?? true]
-    );
-    res.status(201).json({ id: Number(result.insertId), title, route, active: active ?? true });
-  } catch (err) {
-    console.error('Fout bij aanmaken page:', err);
-    res.status(500).json({ error: 'Interne serverfout' });
-  } finally {
-    if (conn) conn.release();
-  }
-});
+// ── Pages ────────────────────────────────────────────────
+export const getPages   = ()               => request('/admin/pages')
+export const getPage    = (id)             => request(`/admin/pages/${id}`)
+export const createPage = (data)           => request('/admin/pages', { method: 'POST', body: JSON.stringify(data) })
+export const updatePage = (id, data)       => request(`/admin/pages/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+export const deletePage = (id)             => request(`/admin/pages/${id}`, { method: 'DELETE' })
 
-// PUT /api/admin/pages/:id — pagina bijwerken
-router.put('/pages/:id', async (req, res) => {
-  const { title, route, active } = req.body;
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    await conn.query(
-      'UPDATE Pages SET title = ?, route = ?, active = ? WHERE id = ?',
-      [title, route, active, req.params.id]
-    );
-    res.json({ message: 'Pagina bijgewerkt' });
-  } catch (err) {
-    console.error('Fout bij bijwerken page:', err);
-    res.status(500).json({ error: 'Interne serverfout' });
-  } finally {
-    if (conn) conn.release();
-  }
-});
+// ── Content ──────────────────────────────────────────────
+// content = { hero_title: 'Welkom', hero_image: '/uploads/abc.jpg', ... }
+// De backend doet upsert per ApiName op basis van page_id
+export const updatePageContent = (id, content) =>
+  request(`/admin/pages/${id}/content`, {
+    method: 'PUT',
+    body: JSON.stringify({ content }),
+  })
 
-// DELETE /api/admin/pages/:id — pagina verwijderen
-router.delete('/pages/:id', async (req, res) => {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    await conn.query('DELETE FROM Pages WHERE id = ?', [req.params.id]);
-    res.json({ message: 'Pagina verwijderd' });
-  } catch (err) {
-    console.error('Fout bij verwijderen page:', err);
-    res.status(500).json({ error: 'Interne serverfout' });
-  } finally {
-    if (conn) conn.release();
-  }
-});
+// ── Image upload ─────────────────────────────────────────
+export async function uploadImage(file) {
+  const formData = new FormData()
+  formData.append('image', file)
 
-module.exports = router;
+  const response = await fetch(`${BASE_URL}/admin/upload`, {
+    method: 'POST',
+    body: formData,
+    // Geen Content-Type header: browser stelt multipart/form-data automatisch in
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}))
+    throw new Error(error.error || `Upload mislukt: ${response.status}`)
+  }
+
+  const data = await response.json()
+  return data.url
+}

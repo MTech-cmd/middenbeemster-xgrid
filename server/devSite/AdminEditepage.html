@@ -1,35 +1,347 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Pages</title>
-</head>
-<body>
-    <!-- side bar -->
-    <div id="side_bar">
-        <h1>Admin</h1>
-        <p>pages</p>
-        <p>navbar</p>
-        <p>logout</p>
-    </div>
-    <!-- content -->
-    <div>
-        <div id="options">
-            <button>preview</button>
-            
-        </div>
-        <!-- de gekoze template met de data die er bij hoort er in met -->
-        <div id="de_gekoze_template">
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { getPage, updatePageContent, uploadImage } from '@/services/api.js'
+
+const router = useRouter()
+const route  = useRoute()
+
+const page          = ref(null)
+const content       = ref({})   // { hero_title: 'Welkom', hero_image: '/uploads/...' }
+const loading       = ref(true)
+const saving        = ref(false)
+const saveSuccess   = ref(false)
+const error         = ref(null)
+const showPreview   = ref(false)
+const uploadingField = ref(null)
+
+const navItems = [
+  { label: 'Pages', icon: '▤', route: '/admin/pages' },
+  { label: 'Navbar', icon: '☰', route: '/admin' },
+]
+
+// Velden per template — ApiName is de sleutel die in Content.ApiName opgeslagen wordt
+const templateFields = {
+  blank: [
+    { key: 'body_text',      label: 'Inhoud',            type: 'textarea' },
+  ],
+  landing: [
+    { key: 'hero_title',     label: 'Hero titel',        type: 'text' },
+    { key: 'hero_subtitle',  label: 'Hero subtitel',     type: 'text' },
+    { key: 'hero_image',     label: 'Hero afbeelding',   type: 'image' },
+    { key: 'cta_label',      label: 'Knoptekst',         type: 'text' },
+    { key: 'cta_url',        label: 'Knop URL',          type: 'text' },
+    { key: 'section1_title', label: 'Sectie 1 titel',    type: 'text' },
+    { key: 'section1_text',  label: 'Sectie 1 tekst',    type: 'textarea' },
+    { key: 'section1_image', label: 'Sectie 1 foto',     type: 'image' },
+  ],
+  blog: [
+    { key: 'hero_title',     label: 'Blog titel',        type: 'text' },
+    { key: 'hero_image',     label: 'Header afbeelding', type: 'image' },
+    { key: 'intro_text',     label: 'Introductie',       type: 'textarea' },
+  ],
+  contact: [
+    { key: 'hero_title',     label: 'Paginatitel',       type: 'text' },
+    { key: 'intro_text',     label: 'Introductietekst',  type: 'textarea' },
+    { key: 'hero_image',     label: 'Header afbeelding', type: 'image' },
+    { key: 'email',          label: 'Contactmail',       type: 'text' },
+  ],
+}
+
+// Template kolom heet in de DB "Template" (was "Texmplate")
+const fields = computed(() =>
+  page.value
+    ? (templateFields[page.value.Template?.toLowerCase()] ?? templateFields.blank)
+    : []
+)
+
+async function fetchPage() {
+  loading.value = true; error.value = null
+  try {
+    const data = await getPage(route.params.id)
+    page.value = data
+
+    // Backend levert content als { ApiName: { value, type } }
+    // We zetten dit om naar { hero_title: 'Welkom', ... } voor v-model binding
+    content.value = Object.fromEntries(
+      Object.entries(data.content ?? {}).map(([key, obj]) => [key, obj.value ?? ''])
+    )
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+
+async function save() {
+  saving.value = true; saveSuccess.value = false; error.value = null
+  try {
+    await updatePageContent(route.params.id, content.value)
+    saveSuccess.value = true
+    setTimeout(() => saveSuccess.value = false, 2500)
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    saving.value = false
+  }
+}
+
+async function handleImageUpload(field, event) {
+  const file = event.target.files[0]
+  if (!file) return
+  uploadingField.value = field.key
+  try {
+    content.value[field.key] = await uploadImage(file)
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    uploadingField.value = null
+  }
+}
+
+function removeImage(key) { content.value[key] = null }
+function logout() { console.log('Logout') }
+
+onMounted(fetchPage)
+</script>
+
+<template>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button v-for="item in navItems" :key="item.label" class="nav-item" @click="router.push(item.route)">
+          <span class="nav-icon">{{ item.icon }}</span><span>{{ item.label }}</span>
+        </button>
+      </nav>
+      <button class="logout-btn" @click="logout"><span>↩</span> Logout</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="content">
+      <div v-if="loading" class="center-state"><span class="spinner lg"></span><p>Pagina laden...</p></div>
+      <div v-else-if="error && !page" class="center-state error"><span>⚠</span><p>{{ error }}</p></div>
+
+      <template v-else-if="page">
+        <!-- Header -->
+        <div class="page-header">
+          <div class="header-left">
+            <button class="back-btn" @click="router.push('/admin/pages')">← Terug</button>
             <div>
-                <p>template</p>
-                <p>{{get('pages')}}</p>
+              <!-- Kolom heet Template (was Texmplate), route heet Routing -->
+              <h1>{{ page.Template }} — <span class="h1-route">{{ page.Routing }}</span></h1>
+              <div class="meta-row">
+                <code class="route-pill">{{ page.Routing }}</code>
+                <span class="template-pill">{{ page.Template }}</span>
+                <span class="meta-hint" v-if="page.publishedByName">door {{ page.publishedByName }}</span>
+              </div>
             </div>
+          </div>
+          <div class="header-actions">
+            <button class="btn-ghost" @click="showPreview = true"><span>👁</span> Preview</button>
+            <button class="btn-primary" :disabled="saving" @click="save">
+              <span v-if="saving" class="spinner small"></span>
+              <span v-else-if="saveSuccess">✓ Opgeslagen</span>
+              <span v-else>Opslaan</span>
+            </button>
+          </div>
         </div>
-        <!-- aanpassingen opslaan -->
-        <div id="save">
-            <button>save</button>
+
+        <div v-if="error" class="error-banner">⚠ {{ error }}</div>
+
+        <!-- Editor grid -->
+        <div class="editor-grid">
+          <div
+            v-for="field in fields" :key="field.key"
+            class="field-card"
+            :class="{ wide: field.type === 'textarea' || field.type === 'image' }"
+          >
+            <label class="field-label">{{ field.label }}</label>
+
+            <input
+              v-if="field.type === 'text'"
+              v-model="content[field.key]"
+              type="text"
+              class="form-input"
+              :placeholder="`Voer ${field.label.toLowerCase()} in...`"
+            />
+
+            <textarea
+              v-else-if="field.type === 'textarea'"
+              v-model="content[field.key]"
+              class="form-textarea"
+              :placeholder="`Voer ${field.label.toLowerCase()} in...`"
+              rows="5"
+            ></textarea>
+
+            <div v-else-if="field.type === 'image'" class="image-field">
+              <div v-if="content[field.key]" class="image-preview-wrap">
+                <img :src="content[field.key]" :alt="field.label" class="image-preview" />
+                <button class="image-remove" @click="removeImage(field.key)">✕</button>
+              </div>
+              <label class="upload-zone" :class="{ uploading: uploadingField === field.key }">
+                <input type="file" accept="image/*" class="file-input" @change="handleImageUpload(field, $event)" :disabled="uploadingField === field.key" />
+                <span v-if="uploadingField === field.key" class="spinner small"></span>
+                <span v-else>
+                  <span class="upload-icon">↑</span>
+                  {{ content[field.key] ? 'Vervang afbeelding' : 'Upload afbeelding' }}
+                </span>
+              </label>
+            </div>
+          </div>
         </div>
+      </template>
+    </main>
+
+    <!-- Sticky save bar -->
+    <div class="save-bar" v-if="page">
+      <span v-if="saveSuccess" class="save-ok">✓ Wijzigingen opgeslagen</span>
+      <span v-else-if="error" class="save-err">⚠ {{ error }}</span>
+      <span v-else class="save-hint">Vergeet niet op te slaan</span>
+      <button class="btn-primary" :disabled="saving" @click="save">
+        <span v-if="saving" class="spinner small"></span>
+        {{ saving ? 'Opslaan...' : 'Opslaan' }}
+      </button>
     </div>
-</body>
-</html>
+
+    <!-- Preview modal -->
+    <Transition name="modal">
+      <div v-if="showPreview" class="modal-overlay" @click.self="showPreview = false">
+        <div class="preview-modal">
+          <div class="preview-modal-header">
+            <span>Preview — {{ page?.Routing }}</span>
+            <button class="modal-close" @click="showPreview = false">✕</button>
+          </div>
+          <div class="preview-frame-wrap">
+
+            <div v-if="page?.Template?.toLowerCase() === 'landing'" class="tpl tpl-landing">
+              <div class="tpl-hero" :style="content.hero_image ? `background-image:url(${content.hero_image})` : ''">
+                <div class="tpl-hero-overlay">
+                  <h2>{{ content.hero_title || 'Hero titel' }}</h2>
+                  <p>{{ content.hero_subtitle || 'Subtitel' }}</p>
+                  <button class="tpl-cta">{{ content.cta_label || 'Meer info' }}</button>
+                </div>
+              </div>
+              <div class="tpl-section">
+                <img v-if="content.section1_image" :src="content.section1_image" class="tpl-section-img" />
+                <div>
+                  <h3>{{ content.section1_title || 'Sectie titel' }}</h3>
+                  <p>{{ content.section1_text || 'Sectie tekst...' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div v-else-if="page?.Template?.toLowerCase() === 'blog'" class="tpl tpl-blog">
+              <div class="tpl-hero-img" :style="content.hero_image ? `background-image:url(${content.hero_image})` : ''">
+                <h2>{{ content.hero_title || 'Blog titel' }}</h2>
+              </div>
+              <p class="tpl-intro">{{ content.intro_text || 'Introductietekst...' }}</p>
+            </div>
+
+            <div v-else-if="page?.Template?.toLowerCase() === 'contact'" class="tpl tpl-contact">
+              <div class="tpl-hero-img" :style="content.hero_image ? `background-image:url(${content.hero_image})` : ''">
+                <h2>{{ content.hero_title || 'Contact' }}</h2>
+              </div>
+              <p class="tpl-intro">{{ content.intro_text || 'Introductietekst...' }}</p>
+              <div class="tpl-form-mock">
+                <div class="tpl-field-mock"></div>
+                <div class="tpl-field-mock"></div>
+                <div class="tpl-field-mock tall"></div>
+                <div class="tpl-btn-mock">Verstuur</div>
+              </div>
+            </div>
+
+            <div v-else class="tpl tpl-blank">
+              <p>{{ content.body_text || 'Geen inhoud.' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </div>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+* { box-sizing:border-box; margin:0; padding:0; }
+.admin-layout { display:flex; min-height:100vh; font-family:'Syne',sans-serif; background:#0d0d0f; color:#e8e4dc; }
+.sidebar { width:220px; min-height:100vh; background:#111114; border-right:1px solid #222228; display:flex; flex-direction:column; padding:28px 16px; position:sticky; top:0; height:100vh; }
+.sidebar-logo { display:flex; align-items:center; gap:10px; padding:0 8px 32px; border-bottom:1px solid #222228; margin-bottom:24px; }
+.logo-icon { font-size:22px; color:#c8f55a; } .logo-text { font-size:18px; font-weight:800; letter-spacing:.05em; color:#f0ece4; }
+.sidebar-nav { display:flex; flex-direction:column; gap:4px; flex:1; }
+.nav-item { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:8px; border:none; background:transparent; color:#888; font-family:'Syne',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:background .15s,color .15s; text-align:left; }
+.nav-item:hover { background:#1a1a20; color:#e8e4dc; }
+.nav-icon { font-size:16px; width:20px; text-align:center; }
+.logout-btn { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:8px; border:1px solid #2a2a30; background:transparent; color:#666; font-family:'Syne',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all .15s; margin-top:8px; }
+.logout-btn:hover { border-color:#ff5555; color:#ff5555; background:#ff555510; }
+.content { flex:1; padding:40px 48px 120px; overflow-y:auto; }
+.center-state { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; height:300px; color:#555; font-size:14px; }
+.center-state.error { color:#ff5555; }
+.page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:32px; gap:16px; }
+.header-left { display:flex; align-items:flex-start; gap:16px; }
+.back-btn { padding:8px 14px; border-radius:8px; border:1px solid #2a2a30; background:transparent; color:#666; font-family:'Syne',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.back-btn:hover { border-color:#555; color:#ccc; }
+.page-header h1 { font-size:22px; font-weight:800; color:#f0ece4; margin-bottom:8px; }
+.h1-route { font-family:'DM Mono',monospace; font-size:18px; color:#c8f55a; font-weight:400; }
+.meta-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.route-pill { font-family:'DM Mono',monospace; font-size:12px; background:#1a1a20; padding:3px 8px; border-radius:5px; color:#c8f55a; }
+.template-pill { font-family:'DM Mono',monospace; font-size:12px; padding:3px 9px; border-radius:99px; background:#1e1e28; color:#aaa; border:1px solid #2a2a36; }
+.meta-hint { font-size:12px; color:#444; }
+.header-actions { display:flex; gap:10px; flex-shrink:0; }
+.btn-primary { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:9px; border:none; background:#c8f55a; color:#0d0d0f; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s,transform .1s; }
+.btn-primary:hover { opacity:.88; transform:translateY(-1px); } .btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.btn-ghost { display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:9px; border:1px solid #2a2a30; background:transparent; color:#888; font-family:'Syne',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:all .15s; }
+.btn-ghost:hover { border-color:#555; color:#ccc; }
+.error-banner { background:#ff555518; border:1px solid #ff555540; color:#ff5555; font-size:13px; padding:10px 16px; border-radius:9px; margin-bottom:20px; }
+.editor-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.field-card { background:#111114; border:1px solid #222228; border-radius:12px; padding:20px; }
+.field-card.wide { grid-column:1 / -1; }
+.field-label { display:block; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#555; margin-bottom:10px; }
+.form-input { width:100%; padding:10px 14px; border-radius:8px; border:1px solid #2a2a30; background:#0d0d0f; color:#e8e4dc; font-family:'Syne',sans-serif; font-size:14px; outline:none; transition:border-color .15s; }
+.form-input:focus { border-color:#c8f55a55; } .form-input::placeholder { color:#444; }
+.form-textarea { width:100%; padding:10px 14px; border-radius:8px; border:1px solid #2a2a30; background:#0d0d0f; color:#e8e4dc; font-family:'Syne',sans-serif; font-size:14px; outline:none; transition:border-color .15s; resize:vertical; line-height:1.6; }
+.form-textarea:focus { border-color:#c8f55a55; } .form-textarea::placeholder { color:#444; }
+.image-field { display:flex; flex-direction:column; gap:12px; }
+.image-preview-wrap { position:relative; display:inline-block; max-width:100%; }
+.image-preview { width:100%; max-height:200px; object-fit:cover; border-radius:8px; border:1px solid #2a2a30; display:block; }
+.image-remove { position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:6px; border:none; background:#000000cc; color:#ff5555; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+.image-remove:hover { background:#ff555533; }
+.upload-zone { display:flex; align-items:center; justify-content:center; gap:8px; padding:14px; border:1px dashed #2a2a30; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600; color:#666; transition:all .15s; }
+.upload-zone:hover { border-color:#c8f55a55; color:#c8f55a; background:#c8f55a08; }
+.upload-zone.uploading { opacity:.6; cursor:not-allowed; }
+.upload-icon { font-size:16px; }
+.file-input { display:none; }
+.save-bar { position:fixed; bottom:0; left:220px; right:0; padding:16px 48px; background:#111114ee; backdrop-filter:blur(8px); border-top:1px solid #222228; display:flex; align-items:center; justify-content:space-between; z-index:50; }
+.save-hint { font-size:13px; color:#444; } .save-ok { font-size:13px; color:#c8f55a; font-weight:600; } .save-err { font-size:13px; color:#ff5555; }
+.spinner { width:16px; height:16px; border:2px solid #333; border-top-color:#c8f55a; border-radius:50%; animation:spin .6s linear infinite; display:inline-block; }
+.spinner.small { width:13px; height:13px; } .spinner.lg { width:32px; height:32px; border-width:3px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.modal-overlay { position:fixed; inset:0; background:#000000cc; backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:100; }
+.preview-modal { background:#111114; border:1px solid #2a2a30; border-radius:16px; width:820px; max-width:96vw; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; }
+.preview-modal-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; border-bottom:1px solid #1e1e24; font-size:14px; font-weight:600; color:#888; flex-shrink:0; }
+.modal-close { width:28px; height:28px; border-radius:7px; border:1px solid #2a2a30; background:transparent; color:#666; font-size:12px; cursor:pointer; transition:all .15s; }
+.modal-close:hover { border-color:#ff5555; color:#ff5555; }
+.preview-frame-wrap { overflow-y:auto; flex:1; }
+.tpl { font-family:'Syne',sans-serif; background:#fff; color:#111; min-height:400px; }
+.tpl-hero { min-height:220px; background:#1a1a20 center/cover no-repeat; position:relative; }
+.tpl-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,#00000044,#000000aa); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:24px; text-align:center; color:#fff; }
+.tpl-hero-overlay h2 { font-size:28px; font-weight:800; } .tpl-hero-overlay p { font-size:15px; opacity:.85; }
+.tpl-cta { padding:10px 22px; background:#c8f55a; color:#111; border:none; border-radius:8px; font-weight:700; font-size:14px; cursor:default; }
+.tpl-section { display:flex; gap:20px; align-items:flex-start; padding:28px 32px; }
+.tpl-section-img { width:160px; height:110px; object-fit:cover; border-radius:8px; flex-shrink:0; }
+.tpl-section h3 { font-size:18px; font-weight:700; margin-bottom:8px; color:#111; } .tpl-section p { font-size:14px; color:#555; line-height:1.6; }
+.tpl-hero-img { min-height:180px; background:#1a1a20 center/cover no-repeat; display:flex; align-items:flex-end; padding:20px 28px; }
+.tpl-hero-img h2 { font-size:26px; font-weight:800; color:#fff; text-shadow:0 2px 8px #000a; }
+.tpl-intro { padding:24px 28px; font-size:14px; color:#444; line-height:1.7; }
+.tpl-form-mock { padding:0 28px 28px; display:flex; flex-direction:column; gap:10px; max-width:480px; }
+.tpl-field-mock { height:38px; background:#f2f2f2; border-radius:6px; border:1px solid #ddd; }
+.tpl-field-mock.tall { height:90px; }
+.tpl-btn-mock { align-self:flex-start; padding:10px 22px; background:#c8f55a; color:#111; border-radius:7px; font-size:13px; font-weight:700; }
+.tpl-blank { padding:32px; font-size:14px; color:#444; line-height:1.7; min-height:200px; }
+.modal-enter-active,.modal-leave-active { transition:opacity .2s; }
+.modal-enter-from,.modal-leave-to { opacity:0; }
+</style>
