@@ -105,7 +105,7 @@ async function fetchPages() {
       headers: {
         'Content-Type': 'application/json',
         // Voeg hier je auth header toe indien nodig:
-        // 'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
       },
     })
     if (!response.ok) throw new Error(`Server error: ${response.status}`)

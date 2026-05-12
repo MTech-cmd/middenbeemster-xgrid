@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CMS API Tester</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 5px;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: auto;
+  }
+
+  .card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: monospace;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background: #1d4ed8;
+  }
+
+  pre {
+    background: #111827;
+    color: #10b981;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+  }
+
+  .status {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .success {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .error {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .small {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .endpoint-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>CMS Backend API Tester</h1>
+  <p>Test alle API endpoints van jouw CMS backend.</p>
+
+  <!-- Config -->
+  <div class="card">
+    <h2>Configuratie</h2>
+    <label>API Base URL</label>
+    <input id="baseUrl" value="http://localhost:3000/api" />
+    
+    <label>JWT Token</label>
+    <textarea id="token" placeholder="JWT token verschijnt hier na login"></textarea>
+  </div>
+
+  <div class="grid">
+
+    <!-- Login -->
+    <div class="card">
+      <div class="endpoint-title">POST /auth/login</div>
+
+      <label>Username</label>
+      <input id="loginUsername" value="admin" />
+
+      <label>Password</label>
+      <input id="loginPassword" type="password" value="admin" />
+
+      <button onclick="login()">Login</button>
+      <div id="loginStatus"></div>
+      <pre id="loginOutput"></pre>
+    </div>
+
+    <!-- Admin Check -->
+    <div class="card">
+      <div class="endpoint-title">GET /auth/admin</div>
+      <button onclick="checkAdmin()">Test Admin Route</button>
+      <pre id="adminOutput"></pre>
+    </div>
+
+    <!-- Get Pages -->
+    <div class="card">
+      <div class="endpoint-title">GET /admin/pages</div>
+      <button onclick="getPages()">Get Pages</button>
+      <pre id="pagesOutput"></pre>
+    </div>
+
+    <!-- Get Page -->
+    <div class="card">
+      <div class="endpoint-title">GET /admin/pages/:id</div>
+      <input id="pageId" value="1" />
+      <button onclick="getPage()">Get Page</button>
+      <pre id="pageOutput"></pre>
+    </div>
+
+    <!-- Create Page -->
+    <div class="card">
+      <div class="endpoint-title">POST /admin/pages</div>
+      <textarea id="createPageData">{
+  "template": "home",
+  "routing": "/"
+}</textarea>
+      <button onclick="createPage()">Create Page</button>
+      <pre id="createPageOutput"></pre>
+    </div>
+
+    <!-- Update Page -->
+    <div class="card">
+      <div class="endpoint-title">PUT /admin/pages/:id</div>
+      <input id="updatePageId" value="1" />
+      <textarea id="updatePageData">{
+  "template": "landing",
+  "routing": "/over-ons"
+}</textarea>
+      <button onclick="updatePage()">Update Page</button>
+      <pre id="updatePageOutput"></pre>
+    </div>
+
+    <!-- Update Content -->
+    <div class="card">
+      <div class="endpoint-title">PUT /admin/pages/:id/content</div>
+      <input id="contentPageId" value="1" />
+      <textarea id="contentData">{
+  "content": {
+    "hero_title": "Welkom op de website",
+    "hero_subtitle": "Onze website",
+    "hero_image": "/uploads/banner.jpg"
+  }
+}</textarea>
+      <button onclick="updateContent()">Save Content</button>
+      <pre id="contentOutput"></pre>
+    </div>
+
+    <!-- Delete Page -->
+    <div class="card">
+      <div class="endpoint-title">DELETE /admin/pages/:id</div>
+      <input id="deletePageId" value="1" />
+      <button onclick="deletePage()">Delete Page</button>
+      <pre id="deletePageOutput"></pre>
+    </div>
+
+    <!-- Upload -->
+    <div class="card">
+      <div class="endpoint-title">POST /admin/upload</div>
+      <input type="file" id="imageFile" />
+      <button onclick="uploadImage()">Upload Image</button>
+      <pre id="uploadOutput"></pre>
+    </div>
+
+    <!-- Content API -->
+    <div class="card">
+      <div class="endpoint-title">GET /content</div>
+      <button onclick="getAllContent()">Get All Content</button>
+      <pre id="allContentOutput"></pre>
+    </div>
+
+    <div class="card">
+      <div class="endpoint-title">GET /content/:location</div>
+      <input id="contentLocation" value="home" />
+      <button onclick="getContentByLocation()">Get Content by Location</button>
+      <pre id="contentLocationOutput"></pre>
+    </div>
+
+    <div class="card">
+      <div class="endpoint-title">POST /content</div>
+      <textarea id="createContentData">{
+  "Location": "home",
+  "ApiName": "hero_title",
+  "Content": "Welkom",
+  "Type": "text",
+  "PublishedBy": 1
+}</textarea>
+      <button onclick="createContent()">Create Content</button>
+      <pre id="createContentOutput"></pre>
+    </div>
+
+    <!-- Full Test -->
+    <div class="card">
+      <div class="endpoint-title">Volledige Systeemtest</div>
+      <button onclick="runFullTest()">Run All Tests</button>
+      <pre id="fullTestOutput"></pre>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function getBaseUrl() {
+  return document.getElementById('baseUrl').value.trim();
+}
+
+function getToken() {
+  return document.getElementById('token').value.trim();
+}
+
+function setOutput(id, data) {
+  document.getElementById(id).textContent =
+    typeof data === 'string'
+      ? data
+      : JSON.stringify(data, null, 2);
+}
+
+async function apiRequest(path, options = {}) {
+  const headers = options.headers || {};
+  headers['Accept'] = 'application/json';
+
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  const token = getToken();
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+
+  const response = await fetch(getBaseUrl() + path, {
+    ...options,
+    headers
+  });
+
+  let data;
+  const text = await response.text();
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+
+  if (!response.ok) {
+    throw {
+      status: response.status,
+      data
+    };
+  }
+
+  return data;
+}
+
+function parseJSON(textareaId) {
+  return JSON.parse(document.getElementById(textareaId).value);
+}
+
+// Login
+async function login() {
+  try {
+    const data = await apiRequest('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: document.getElementById('loginUsername').value,
+        password: document.getElementById('loginPassword').value
+      })
+    });
+
+    if (data.token) {
+      document.getElementById('token').value = data.token;
+    }
+
+    setOutput('loginOutput', data);
+  } catch (err) {
+    setOutput('loginOutput', err);
+  }
+}
+
+// Admin check
+async function checkAdmin() {
+  try {
+    const data = await apiRequest('/auth/admin');
+    setOutput('adminOutput', data);
+  } catch (err) {
+    setOutput('adminOutput', err);
+  }
+}
+
+// Pages
+async function getPages() {
+  try {
+    setOutput('pagesOutput', await apiRequest('/admin/pages'));
+  } catch (err) {
+    setOutput('pagesOutput', err);
+  }
+}
+
+async function getPage() {
+  try {
+    const id = document.getElementById('pageId').value;
+    setOutput('pageOutput', await apiRequest('/admin/pages/' + id));
+  } catch (err) {
+    setOutput('pageOutput', err);
+  }
+}
+
+async function createPage() {
+  try {
+    setOutput('createPageOutput',
+      await apiRequest('/admin/pages', {
+        method: 'POST',
+        body: JSON.stringify(parseJSON('createPageData'))
+      })
+    );
+  } catch (err) {
+    setOutput('createPageOutput', err);
+  }
+}
+
+async function updatePage() {
+  try {
+    const id = document.getElementById('updatePageId').value;
+    setOutput('updatePageOutput',
+      await apiRequest('/admin/pages/' + id, {
+        method: 'PUT',
+        body: JSON.stringify(parseJSON('updatePageData'))
+      })
+    );
+  } catch (err) {
+    setOutput('updatePageOutput', err);
+  }
+}
+
+async function updateContent() {
+  try {
+    const id = document.getElementById('contentPageId').value;
+    setOutput('contentOutput',
+      await apiRequest('/admin/pages/' + id + '/content', {
+        method: 'PUT',
+        body: JSON.stringify(parseJSON('contentData'))
+      })
+    );
+  } catch (err) {
+    setOutput('contentOutput', err);
+  }
+}
+
+async function deletePage() {
+  try {
+    const id = document.getElementById('deletePageId').value;
+    setOutput('deletePageOutput',
+      await apiRequest('/admin/pages/' + id, {
+        method: 'DELETE'
+      })
+    );
+  } catch (err) {
+    setOutput('deletePageOutput', err);
+  }
+}
+
+// Upload
+async function uploadImage() {
+  try {
+    const file = document.getElementById('imageFile').files[0];
+    if (!file) {
+      alert('Selecteer eerst een bestand.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setOutput('uploadOutput',
+      await apiRequest('/admin/upload', {
+        method: 'POST',
+        body: formData
+      })
+    );
+  } catch (err) {
+    setOutput('uploadOutput', err);
+  }
+}
+
+// Content API
+async function getAllContent() {
+  try {
+    setOutput('allContentOutput',
+      await apiRequest('/content'));
+  } catch (err) {
+    setOutput('allContentOutput', err);
+  }
+}
+
+async function getContentByLocation() {
+  try {
+    const location = document.getElementById('contentLocation').value;
+    setOutput('contentLocationOutput',
+      await apiRequest('/content/' + encodeURIComponent(location)));
+  } catch (err) {
+    setOutput('contentLocationOutput', err);
+  }
+}
+
+async function createContent() {
+  try {
+    setOutput('createContentOutput',
+      await apiRequest('/content', {
+        method: 'POST',
+        body: JSON.stringify(parseJSON('createContentData'))
+      })
+    );
+  } catch (err) {
+    setOutput('createContentOutput', err);
+  }
+}
+
+// Full system test
+async function runFullTest() {
+  const output = document.getElementById('fullTestOutput');
+  output.textContent = '';
+
+  function log(msg) {
+    output.textContent += msg + '\n';
+  }
+
+  const tests = [
+    ['Login', login],
+    ['Admin check', checkAdmin],
+    ['Get pages', getPages],
+    ['Get all content', getAllContent]
+  ];
+
+  for (const [name, fn] of tests) {
+    log('▶ ' + name);
+    try {
+      await fn();
+      log('✅ OK\n');
+    } catch (e) {
+      log('❌ FAILED\n');
+    }
+  }
+
+  log('Klaar.');
+}
+</script>
+</body>
+</html>
