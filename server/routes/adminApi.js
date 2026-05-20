@@ -30,19 +30,24 @@ const upload = multer({
 
 // ── Pages ───────────────────────────────────────────────
 
-// GET /api/admin/pages
-router.get('/pages', async (req, res) => {
+// POST /api/admin/pages
+router.post('/pages', async (req, res) => {
+  const { template, routing } = req.body;
+  // PublishedBy komt uit de ingelogde gebruiker (req.user.id via auth middleware)
+  const publishedBy = req.user?.id;
+  if (!template || !routing) return res.status(400).json({ error: 'template en routing zijn verplicht' });
+  if (!publishedBy) return res.status(401).json({ error: 'Niet ingelogd' });
+
   let conn;
   try {
     conn = await pool.getConnection();
-    const pages = await conn.query(`
-      SELECT p.*, u.username AS publishedByName
-      FROM Pages p
-      LEFT JOIN UserAdmin u ON u.id = p.PublishedBy
-    `);
-    res.json(pages);
+    const result = await conn.query(
+      'INSERT INTO Pages (Template, Routing, PublishedBy) VALUES (?, ?, ?)',
+      [template, routing, publishedBy]
+    );
+    res.status(201).json({ id: Number(result.insertId), template, routing });
   } catch (err) {
-    console.error('Fout bij ophalen pages:', err);
+    console.error('Fout bij aanmaken page:', err);
     res.status(500).json({ error: 'Interne serverfout' });
   } finally {
     if (conn) conn.release();
