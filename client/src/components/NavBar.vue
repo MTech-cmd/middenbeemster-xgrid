@@ -22,6 +22,22 @@
   </nav>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const activeCard = ref('info')
+const data = ref([])
+
+// helper functie
+const get = (id) => {
+  return data.value.find(item => item.ApiName === id)?.Content || ''
+}
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:3000/api/content/NavBar')
+  data.value = await res.json()
+})
+</script>
 <style scoped>
 .navbar {
   position: fixed;

@@ -82,4 +82,7 @@ router.get('/admin', authMiddleware, (req, res) => {
   res.json({ message: 'Welkom admin!' });
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  authMiddleware
+};

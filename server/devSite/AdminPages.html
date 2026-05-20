@@ -1,31 +1,799 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Pages</title>
-</head>
-<body>
-    <!-- side bar -->
-    <div id="side_bar">
-        <h1>Admin</h1>
-        <p>pages</p>
-        <p>navbar</p>
-        <p>logout</p>
-    </div>
-    <!-- content -->
-    <div>
-        <!-- welke pages je nu hebt met titel, routing en welke template -->
-        <div id="all_your_pages">
-            <h1>All your pages</h1>
-            <p>{{get('pages')}}</p>
-            <button>Edit</button>
-            <button>Delete</button>
-        </div>
-        <!-- krijg een popup met welke templates je kan kiezen en een i'tje voor een preview display wordt daarna pas door verwezen -->
+<template>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button
+          v-for="item in navItems"
+          :key="item.id"
+          class="nav-item"
+          :class="{ active: item.id === 'pages' }"
+          @click="navigateTo(item.route)"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
+      <button class="logout-btn" @click="logout">
+        <span>↩</span> Logout
+      </button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="content">
+      <div class="page-header">
         <div>
-            <button>Add Page</button>
+          <h1>All Pages</h1>
+          <p class="subtitle">Beheer je pagina's, routes en templates</p>
         </div>
-    </div>
-</body>
-</html>
+        <button class="btn-primary" @click="openAddModal">
+          <span>＋</span> Add Page
+        </button>
+      </div>
+
+      <div class="card">
+        <div v-if="loading" class="state-msg">
+          <span class="spinner"></span> Pagina's laden...
+        </div>
+
+        <div v-else-if="error" class="state-msg error">
+          ⚠ {{ error }}
+        </div>
+
+        <div v-else-if="pages.length === 0" class="state-msg">
+          Geen pagina's gevonden. Voeg er een toe!
+        </div>
+
+        <table v-else class="pages-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Route</th>
+              <th>Template</th>
+              <th>Status</th>
+              <th>Acties</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="page in pages"
+              :key="page.id"
+              class="page-row"
+              @click="goToEdit(page.id)"
+            >
+              <td class="id-cell">{{ page.id }}</td>
+              <td class="title-cell">{{ page.title }}</td>
+              <td><code class="route">{{ page.route }}</code></td>
+              <td>
+                <span class="template-badge">{{ page.template || 'default' }}</span>
+              </td>
+              <td>
+                <span class="status-badge" :class="page.active ? 'active' : 'inactive'">
+                  {{ page.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="actions-cell" @click.stop>
+                <button class="action-btn edit" @click="goToEdit(page.id)" title="Aanpassen">
+                  ✎
+                </button>
+                <button class="action-btn delete" @click="confirmDelete(page)" title="Verwijderen">
+                  ✕
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- ── Add Page Modal ── -->
+    <Transition name="modal">
+      <div v-if="showAddModal" class="modal-overlay" @click.self="closeAddModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h2>Nieuwe pagina</h2>
+            <button class="modal-close" @click="closeAddModal">✕</button>
+          </div>
+
+          <!-- Step 1: kies template -->
+          <div v-if="modalStep === 1">
+            <p class="modal-subtitle">Kies een template om mee te beginnen</p>
+            <div class="template-grid">
+              <div
+                v-for="tpl in templates"
+                :key="tpl.id"
+                class="template-card"
+                :class="{ selected: newPage.template === tpl.id }"
+                @click="newPage.template = tpl.id"
+              >
+                <div class="template-preview">{{ tpl.preview }}</div>
+                <div class="template-info">
+                  <span class="template-name">{{ tpl.name }}</span>
+                  <button
+                    class="preview-btn"
+                    @click.stop="previewTemplate = tpl"
+                    title="Preview"
+                  >ℹ</button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-ghost" @click="closeAddModal">Annuleer</button>
+              <button
+                class="btn-primary"
+                :disabled="!newPage.template"
+                @click="modalStep = 2"
+              >
+                Volgende →
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: vul details in -->
+          <div v-if="modalStep === 2">
+            <p class="modal-subtitle">Vul de pagina-details in</p>
+            <div class="form-group">
+              <label>Titel</label>
+              <input v-model="newPage.title" type="text" placeholder="bijv. Contact" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>Route</label>
+              <div class="input-prefix">
+                <span>/</span>
+                <input v-model="newPage.route" type="text" placeholder="bijv. contact" class="form-input" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <div class="toggle-row">
+                <span>{{ newPage.active ? 'Actief' : 'Inactief' }}</span>
+                <button
+                  class="toggle"
+                  :class="{ on: newPage.active }"
+                  @click="newPage.active = !newPage.active"
+                ></button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn-ghost" @click="modalStep = 1">← Terug</button>
+              <button
+                class="btn-primary"
+                :disabled="!newPage.title || !newPage.route || saving"
+                @click="addPage"
+              >
+                <span v-if="saving" class="spinner small"></span>
+                {{ saving ? 'Opslaan...' : 'Pagina aanmaken' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- ── Template preview modal ── -->
+    <Transition name="modal">
+      <div v-if="previewTemplate" class="modal-overlay" @click.self="previewTemplate = null">
+        <div class="modal modal-sm">
+          <div class="modal-header">
+            <h2>{{ previewTemplate.name }}</h2>
+            <button class="modal-close" @click="previewTemplate = null">✕</button>
+          </div>
+          <div class="preview-large">{{ previewTemplate.preview }}</div>
+          <p class="modal-subtitle" style="padding: 0 24px 24px">{{ previewTemplate.description }}</p>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- ── Delete confirm modal ── -->
+    <Transition name="modal">
+      <div v-if="deleteTarget" class="modal-overlay" @click.self="deleteTarget = null">
+        <div class="modal modal-sm">
+          <div class="modal-header">
+            <h2>Pagina verwijderen</h2>
+            <button class="modal-close" @click="deleteTarget = null">✕</button>
+          </div>
+          <p class="modal-subtitle" style="padding: 0 24px 20px">
+            Weet je zeker dat je <strong>{{ deleteTarget.title }}</strong> wil verwijderen?
+            Dit kan niet ongedaan worden gemaakt.
+          </p>
+          <div class="modal-footer">
+            <button class="btn-ghost" @click="deleteTarget = null">Annuleer</button>
+            <button class="btn-danger" :disabled="deleting" @click="deletePage">
+              <span v-if="deleting" class="spinner small"></span>
+              {{ deleting ? 'Verwijderen...' : 'Verwijder' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const pages = ref([])
+const loading = ref(false)
+const error = ref(null)
+const saving = ref(false)
+const deleting = ref(false)
+
+const showAddModal = ref(false)
+const modalStep = ref(1)
+const previewTemplate = ref(null)
+const deleteTarget = ref(null)
+
+const newPage = ref({ title: '', route: '', template: '', active: true })
+
+const navItems = [
+  { id: 'pages', label: 'Pages', icon: '▤', route: '/admin/pages' },
+  { id: 'navbar', label: 'Navbar', icon: '☰', route: '/admin' },
+]
+
+const templates = [
+  {
+    id: 'blank',
+    name: 'Blank',
+    preview: '☐',
+    description: 'Lege pagina zonder opmaak. Ideaal als je helemaal zelf wil beginnen.',
+  },
+  {
+    id: 'landing',
+    name: 'Landing Page',
+    preview: '▬\n▭\n▭',
+    description: 'Hero-sectie bovenaan met CTA-knop, daarna content blokken.',
+  },
+  {
+    id: 'blog',
+    name: 'Blog',
+    preview: '▬\n─\n─\n─',
+    description: 'Lijst van artikelen met titel, datum en samenvatting.',
+  },
+  {
+    id: 'contact',
+    name: 'Contact',
+    preview: '▬\n▭\n▭\n■',
+    description: 'Contactformulier met naam, e-mail en bericht veld.',
+  },
+]
+
+function navigateTo(route) {
+  router.push(route)
+}
+
+function goToEdit(id) {
+  router.push(`/admin/pages/${id}`)
+}
+
+function openAddModal() {
+  newPage.value = { title: '', route: '', template: '', active: true }
+  modalStep.value = 1
+  showAddModal.value = true
+}
+
+function closeAddModal() {
+  showAddModal.value = false
+}
+
+function confirmDelete(page) {
+  deleteTarget.value = page
+}
+
+async function fetchPages() {
+  loading.value = true
+  error.value = null
+  try {
+    const res = await fetch('http://localhost:3000/api/admin/pages', {
+      headers: { 'Content-Type': 'application/json' },
+    })
+    if (!res.ok) throw new Error(`Server error: ${res.status}`)
+    pages.value = await res.json()
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+
+async function addPage() {
+  if (!newPage.value.title || !newPage.value.route) return
+  saving.value = true
+  try {
+    const res = await fetch('http://localhost:3000/api/admin/pages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newPage.value),
+    })
+    if (!res.ok) throw new Error(`Server error: ${res.status}`)
+    const created = await res.json()
+    pages.value.push(created)
+    closeAddModal()
+    router.push(`/admin/pages/${created.id}`)
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    saving.value = false
+  }
+}
+
+async function deletePage() {
+  if (!deleteTarget.value) return
+  deleting.value = true
+  try {
+    const res = await fetch(`http://localhost:3000/api/admin/pages/${deleteTarget.value.id}`, {
+      method: 'DELETE',
+    })
+    if (!res.ok) throw new Error(`Server error: ${res.status}`)
+    pages.value = pages.value.filter(p => p.id !== deleteTarget.value.id)
+    deleteTarget.value = null
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    deleting.value = false
+  }
+}
+
+function logout() {
+  console.log('Logout')
+}
+
+onMounted(fetchPages)
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Syne', sans-serif;
+  background: #0d0d0f;
+  color: #e8e4dc;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #111114;
+  border-right: 1px solid #222228;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 32px;
+  border-bottom: 1px solid #222228;
+  margin-bottom: 24px;
+}
+
+.logo-icon { font-size: 22px; color: #c8f55a; }
+.logo-text { font-size: 18px; font-weight: 800; letter-spacing: 0.05em; color: #f0ece4; }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+}
+.nav-item:hover { background: #1a1a20; color: #e8e4dc; }
+.nav-item.active { background: #c8f55a18; color: #c8f55a; }
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #2a2a30;
+  background: transparent;
+  color: #666;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+.logout-btn:hover { border-color: #ff5555; color: #ff5555; background: #ff555510; }
+
+/* ── Content ── */
+.content { flex: 1; padding: 40px 48px; overflow-y: auto; }
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.page-header h1 { font-size: 26px; font-weight: 800; color: #f0ece4; }
+.subtitle { font-size: 14px; color: #555; margin-top: 4px; }
+
+/* ── Card ── */
+.card {
+  background: #111114;
+  border: 1px solid #222228;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* ── State messages ── */
+.state-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 28px;
+  color: #666;
+  font-size: 14px;
+}
+.state-msg.error { color: #ff5555; }
+
+/* ── Table ── */
+.pages-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pages-table thead tr { border-bottom: 1px solid #222228; }
+.pages-table th {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.page-row {
+  border-bottom: 1px solid #1a1a20;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.page-row:last-child { border-bottom: none; }
+.page-row:hover { background: #16161c; }
+.page-row:hover .title-cell { color: #c8f55a; }
+
+.pages-table td { padding: 14px 20px; color: #ccc; }
+
+.id-cell { font-family: 'DM Mono', monospace; color: #555 !important; font-size: 13px; }
+.title-cell { font-weight: 600; color: #e8e4dc; transition: color 0.15s; }
+
+.route {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  background: #1a1a20;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #c8f55a;
+}
+
+.template-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: #1e1e28;
+  color: #aaa;
+  border: 1px solid #2a2a36;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+.status-badge.active { background: #c8f55a18; color: #c8f55a; border: 1px solid #c8f55a40; }
+.status-badge.inactive { background: #ff555518; color: #ff5555; border: 1px solid #ff555540; }
+
+.actions-cell { display: flex; gap: 6px; }
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid #2a2a30;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  color: #666;
+}
+.action-btn.edit:hover { border-color: #c8f55a; color: #c8f55a; background: #c8f55a12; }
+.action-btn.delete:hover { border-color: #ff5555; color: #ff5555; background: #ff555512; }
+
+/* ── Buttons ── */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 9px;
+  border: none;
+  background: #c8f55a;
+  color: #0d0d0f;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  padding: 10px 20px;
+  border-radius: 9px;
+  border: 1px solid #2a2a30;
+  background: transparent;
+  color: #888;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-ghost:hover { border-color: #444; color: #ccc; }
+
+.btn-danger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 9px;
+  border: none;
+  background: #ff5555;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-danger:hover { opacity: 0.85; }
+.btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000bb;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #111114;
+  border: 1px solid #2a2a30;
+  border-radius: 16px;
+  width: 560px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-sm { width: 400px; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 0;
+  margin-bottom: 6px;
+}
+.modal-header h2 { font-size: 18px; font-weight: 700; color: #f0ece4; }
+
+.modal-subtitle { font-size: 13px; color: #666; padding: 8px 24px 20px; }
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid #2a2a30;
+  background: transparent;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.modal-close:hover { border-color: #ff5555; color: #ff5555; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 24px;
+  border-top: 1px solid #1a1a20;
+  margin-top: 16px;
+}
+
+/* ── Template grid ── */
+.template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 24px;
+}
+
+.template-card {
+  border: 1px solid #2a2a30;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.template-card:hover { border-color: #444; background: #16161c; }
+.template-card.selected { border-color: #c8f55a; background: #c8f55a0a; }
+
+.template-preview {
+  height: 80px;
+  background: #0d0d0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  white-space: pre-line;
+  line-height: 1.3;
+  color: #444;
+}
+.template-card.selected .template-preview { color: #c8f55a55; }
+
+.template-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid #1e1e24;
+}
+.template-name { font-size: 13px; font-weight: 600; color: #ccc; }
+
+.preview-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  background: transparent;
+  color: #666;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview-btn:hover { border-color: #c8f55a; color: #c8f55a; }
+
+.preview-large {
+  height: 120px;
+  background: #0d0d0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  white-space: pre-line;
+  line-height: 1.3;
+  color: #444;
+  margin: 0 24px 16px;
+  border-radius: 10px;
+  border: 1px solid #1e1e24;
+}
+
+/* ── Form ── */
+.form-group { padding: 0 24px; margin-bottom: 18px; }
+.form-group label { display: block; font-size: 12px; font-weight: 700; color: #666; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #2a2a30;
+  background: #0d0d0f;
+  color: #e8e4dc;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-color: #c8f55a55; }
+.form-input::placeholder { color: #444; }
+
+.input-prefix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #2a2a30;
+  border-radius: 8px;
+  background: #0d0d0f;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.input-prefix:focus-within { border-color: #c8f55a55; }
+.input-prefix span {
+  padding: 10px 12px;
+  color: #c8f55a;
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  border-right: 1px solid #2a2a30;
+  background: #16161c;
+}
+.input-prefix .form-input { border: none; border-radius: 0; }
+.input-prefix .form-input:focus { border: none; }
+
+.toggle-row { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #aaa; }
+
+.toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 99px;
+  border: none;
+  background: #2a2a30;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #666;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s, background 0.2s;
+}
+.toggle.on { background: #c8f55a30; }
+.toggle.on::after { transform: translateX(18px); background: #c8f55a; }
+
+/* ── Spinner ── */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #333;
+  border-top-color: #c8f55a;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+.spinner.small { width: 13px; height: 13px; border-width: 2px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Modal transition ── */
+.modal-enter-active, .modal-leave-active { transition: opacity 0.2s, transform 0.2s; }
+.modal-enter-from, .modal-leave-to { opacity: 0; }
+.modal-enter-from .modal, .modal-leave-to .modal { transform: scale(0.96) translateY(8px); }
+</style>
