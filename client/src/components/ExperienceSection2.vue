@@ -124,7 +124,7 @@
               </svg>
               Speel Nu
             </div>
-            <h3 class="play-title">Begin je 3D wandeling</h3>
+            <h3 class="play-title">Begin je 3D ballonvaart</h3>
             <p class="play-desc">
               Volledig interactieve 3D scan omgeving waar je vrijelijk kunt rondlopen, historische objecten kunt ontdekken en de transformatie van Midden-Beemster door de tijd kunt beleven. Geen download vereist — speel direct in je browser.
             </p>
