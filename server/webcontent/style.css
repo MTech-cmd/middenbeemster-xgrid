@@ -1,0 +1,80 @@
+body {
+    background-color: rgb(244, 239, 230);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(28, 43, 28);
+    padding: 20px 20px;
+}
+
+header h3 {
+    color: white;
+    margin: 0;
+    margin-right: 200px;
+}
+    
+header a {
+    color: white;
+    text-decoration: none;
+    background-color: rgb(201, 165, 90);
+    padding: 10px 20px;
+    margin: 0;
+    border-radius: 20px;
+}
+
+header a:hover {
+    transition: all 0.3s ease;
+    background-color: rgb(184, 146, 63);
+}
+
+#iframeContainer {
+    width: 1200px;
+    height: 720px;
+    background-image: url("img/loadbg.png");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+    flex-shrink: 1;
+}
+
+iframe {
+    border: none;
+}
+
+#loadIframeBtn {
+    background-color: rgb(201, 165, 90);
+    border: none;
+    border-radius: 200px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+
+#loadIframeBtn:hover {
+    transition: all 0.3s ease;
+    background-color: rgb(184, 146, 63);
+    transform: scale(1.25);
+}
+
+.play {
+    margin-top: 7px;
+    margin-left: 4px;
+}
+
+.centergame {
+    display: flex;
+    justify-content: center;
+    padding: 0px 20px;
+}
