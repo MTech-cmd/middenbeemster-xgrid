@@ -5,12 +5,18 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterView from '../views/RegisterView.vue'
 import Design2View from '../views/Design2View.vue'
 import DesignServer from '../views/DesignServer.vue'
+import AdminDashboard from '../views/admin/AdminDashboard.vue'
 
 const routes = [
   {
     path: '/',
     name: 'landing',
     component: LandingPage,
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminDashboard,
   },
   {
     path: '/design1',
@@ -33,13 +39,13 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/',
-  },
-  {
     path: '/register',
     name: 'register',
     component: RegisterView,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/',
   }
 ]
 

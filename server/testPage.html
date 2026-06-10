@@ -6,247 +6,439 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CMS API Tester</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f5f7fb;
       margin: 0;
-      padding: 20px;
+      color: #1f2937;
     }
 
-    h1 {
-      margin-bottom: 5px;
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
     }
 
-    .container {
-      max-width: 1400px;
-      margin: auto;
+    .sidebar {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
     }
 
-    .card {
+    .sidebar h1 {
+      font-size: 16px;
+      margin: 0 16px 4px;
+      color: #fff;
+    }
+
+    .sidebar p {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 0 16px 16px;
+    }
+
+    .config-block {
+      padding: 0 16px 16px;
+      border-bottom: 1px solid #334155;
+      margin-bottom: 12px;
+    }
+
+    .config-block label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .config-block input,
+    .config-block textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .config-block textarea {
+      min-height: 56px;
+      resize: vertical;
+    }
+
+    .nav-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: #cbd5e1;
+      font-size: 14px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    .nav-btn.active {
+      background: #334155;
+      color: #fff;
+      border-left-color: #3b82f6;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    .panel-area {
+      flex: 1;
+    }
+
+    .category {
+      display: none;
+    }
+
+    .category.active {
+      display: block;
+    }
+
+    .category-header {
+      margin: 0 0 16px;
+      font-size: 22px;
+    }
+
+    .endpoints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .endpoint-card {
       background: white;
       border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 18px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
-    input,
-    textarea,
-    select,
-    button {
+    .endpoint-card .method {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #1e40af;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .endpoint-card label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+
+    .endpoint-card input,
+    .endpoint-card textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      margin-bottom: 12px;
+      padding: 8px;
+      margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      box-sizing: border-box;
       font-family: monospace;
+      font-size: 12px;
     }
 
-    textarea {
-      min-height: 120px;
+    .endpoint-card textarea {
+      min-height: 100px;
     }
 
-    button {
+    .endpoint-card button.action {
+      width: 100%;
+      padding: 9px 16px;
       background: #2563eb;
       color: white;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 13px;
     }
 
-    button:hover {
+    .endpoint-card button.action:hover {
       background: #1d4ed8;
     }
 
-    pre {
+    .response-box {
+      background: white;
+      border-radius: 10px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      bottom: 0;
+    }
+
+    .response-box h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .response-box pre {
       background: #111827;
       color: #10b981;
       padding: 15px;
       border-radius: 8px;
-      overflow-x: auto;
+      overflow: auto;
       white-space: pre-wrap;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-      gap: 20px;
-    }
-
-    .status {
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .small {
+      margin: 0;
+      max-height: 220px;
       font-size: 12px;
-      color: #666;
     }
 
-    .endpoint-title {
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 10px;
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 360px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      animation: toast-in 0.3s ease, toast-out 0.3s ease 5.7s forwards;
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      background: #22c55e;
+      color: #fff;
+      border-left: 4px solid #166534;
+    }
+
+    .toast.error {
+      background: #ef4444;
+      color: #fff;
+      border-left: 4px solid #991b1b;
+    }
+
+    @keyframes toast-in {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes toast-out {
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>CMS Backend API Tester</h1>
-    <p>Test alle API endpoints van jouw CMS backend.</p>
+  <div id="toast-container" aria-live="polite"></div>
 
-    <!-- Config -->
-    <div class="card">
-      <h2>Configuratie</h2>
-      <label>API Base URL</label>
-      <input id="baseUrl" value="http://localhost:3000/api" />
+  <div class="app">
+    <aside class="sidebar">
+      <h1>CMS API Tester</h1>
+      <p>Backend endpoints testen</p>
 
-      <label>JWT Token</label>
-      <textarea id="token" placeholder="JWT token verschijnt hier na login"></textarea>
-    </div>
+      <div class="config-block">
+        <label for="baseUrl">API Base URL</label>
+        <input id="baseUrl" value="http://localhost:3000/api" />
 
-    <div class="grid">
-
-      <!-- Login -->
-      <div class="card">
-        <div class="endpoint-title">POST /auth/login</div>
-
-        <label>Username</label>
-        <input id="loginUsername" value="admin" />
-
-        <label>Password</label>
-        <input id="loginPassword" type="password" value="admin" />
-
-        <button onclick="login()">Login</button>
-        <div id="loginStatus"></div>
-        <pre id="loginOutput"></pre>
+        <label for="token">JWT Token</label>
+        <textarea id="token" placeholder="Token na login"></textarea>
       </div>
 
-      <!-- Admin Check -->
-      <div class="card">
-        <div class="endpoint-title">GET /auth/admin</div>
-        <button onclick="checkAdmin()">Test Admin Route</button>
-        <pre id="adminOutput"></pre>
-      </div>
+      <nav>
+        <button type="button" class="nav-btn active" data-category="system">Systeem</button>
+        <button type="button" class="nav-btn" data-category="auth">Authenticatie</button>
+        <button type="button" class="nav-btn" data-category="pages">Pagina's</button>
+        <button type="button" class="nav-btn" data-category="content">Content API</button>
+      </nav>
+    </aside>
 
-      <!-- Get Pages -->
-      <div class="card">
-        <div class="endpoint-title">GET /admin/pages</div>
-        <button onclick="getPages()">Get Pages</button>
-        <pre id="pagesOutput"></pre>
-      </div>
+    <div class="main">
+      <div class="panel-area">
 
-      <!-- Get Page -->
-      <div class="card">
-        <div class="endpoint-title">GET /admin/pages/:id</div>
-        <input id="pageId" value="1" />
-        <button onclick="getPage()">Get Page</button>
-        <pre id="pageOutput"></pre>
-      </div>
+        <section id="category-system" class="category active">
+          <h2 class="category-header">Systeem</h2>
+          <div class="endpoints-grid">
+            <article class="endpoint-card">
+              <div class="method">Volledige systeemtest</div>
+              <p style="font-size:12px;color:#64748b;margin:0 0 12px;">Login → Admin → Pages → Content</p>
+              <button type="button" class="action" onclick="runFullTest()">Run All Tests</button>
+            </article>
+          </div>
+        </section>
 
-      <!-- Create Page -->
-      <div class="card">
-        <div class="endpoint-title">POST /admin/pages</div>
-        <textarea id="createPageData">{
+        <section id="category-auth" class="category">
+          <h2 class="category-header">Authenticatie</h2>
+          <div class="endpoints-grid">
+            <article class="endpoint-card">
+              <div class="method">POST /auth/login</div>
+              <label>Username</label>
+              <input id="loginUsername" value="admin" />
+              <label>Password</label>
+              <input id="loginPassword" type="password" value="admin" />
+              <button type="button" class="action" onclick="login()">Login</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">GET /auth/admin</div>
+              <button type="button" class="action" onclick="checkAdmin()">Test Admin Route</button>
+            </article>
+          </div>
+        </section>
+
+        <section id="category-pages" class="category">
+          <h2 class="category-header">Pagina's</h2>
+          <div class="endpoints-grid">
+            <article class="endpoint-card">
+              <div class="method">GET /admin/pages</div>
+              <button type="button" class="action" onclick="getPages()">Get Pages</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">GET /admin/pages/:id</div>
+              <label>Pagina ID</label>
+              <input id="pageId" value="1" />
+              <button type="button" class="action" onclick="getPage()">Get Page</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">POST /admin/pages</div>
+              <label>JSON body</label>
+              <textarea id="createPageData">{
   "template": "home",
   "routing": "/"
 }</textarea>
-        <button onclick="createPage()">Create Page</button>
-        <pre id="createPageOutput"></pre>
-      </div>
-
-      <!-- Update Page -->
-      <div class="card">
-        <div class="endpoint-title">PUT /admin/pages/:id</div>
-        <input id="updatePageId" value="1" />
-        <textarea id="updatePageData">{
+              <button type="button" class="action" onclick="createPage()">Create Page</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">PUT /admin/pages/:id</div>
+              <label>Pagina ID</label>
+              <input id="updatePageId" value="1" />
+              <label>JSON body</label>
+              <textarea id="updatePageData">{
   "template": "landing",
   "routing": "/over-ons"
 }</textarea>
-        <button onclick="updatePage()">Update Page</button>
-        <pre id="updatePageOutput"></pre>
-      </div>
-
-      <!-- Update Content -->
-      <div class="card">
-        <div class="endpoint-title">PUT /admin/pages/:id/content</div>
-        <input id="contentPageId" value="1" />
-        <textarea id="contentData">{
+              <button type="button" class="action" onclick="updatePage()">Update Page</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">PUT /admin/pages/:id/content</div>
+              <label>Pagina ID</label>
+              <input id="contentPageId" value="1" />
+              <label>JSON body</label>
+              <textarea id="contentData">{
   "content": {
     "hero_title": "Welkom op de website",
     "hero_subtitle": "Onze website",
     "hero_image": "/uploads/banner.jpg"
   }
 }</textarea>
-        <button onclick="updateContent()">Save Content</button>
-        <pre id="contentOutput"></pre>
-      </div>
+              <button type="button" class="action" onclick="updateContent()">Save Content</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">DELETE /admin/pages/:id</div>
+              <label>Pagina ID</label>
+              <input id="deletePageId" value="1" />
+              <button type="button" class="action" onclick="deletePage()">Delete Page</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">POST /admin/upload</div>
+              <label>Bestand</label>
+              <input type="file" id="imageFile" />
+              <button type="button" class="action" onclick="uploadImage()">Upload Image</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="card">
+                <div class="endpoint-title">GET /admin/uploads</div>
+                  <button onclick="getUploads()">Get Uploads</button>
+                  <pre id="uploadsOutput"></pre>
+                </div>
+              </div>
+            </section>
+        </section>
 
-      <!-- Delete Page -->
-      <div class="card">
-        <div class="endpoint-title">DELETE /admin/pages/:id</div>
-        <input id="deletePageId" value="1" />
-        <button onclick="deletePage()">Delete Page</button>
-        <pre id="deletePageOutput"></pre>
-      </div>
-
-      <!-- Upload -->
-      <div class="card">
-        <div class="endpoint-title">POST /admin/upload</div>
-        <input type="file" id="imageFile" />
-        <button onclick="uploadImage()">Upload Image</button>
-        <pre id="uploadOutput"></pre>
-      </div>
-
-      <!-- Content API -->
-      <div class="card">
-        <div class="endpoint-title">GET /content</div>
-        <button onclick="getAllContent()">Get All Content</button>
-        <pre id="allContentOutput"></pre>
-      </div>
-
-      <div class="card">
-        <div class="endpoint-title">GET /content/:location</div>
-        <input id="contentLocation" value="home" />
-        <button onclick="getContentByLocation()">Get Content by Location</button>
-        <pre id="contentLocationOutput"></pre>
-      </div>
-
-      <div class="card">
-        <div class="endpoint-title">POST /content</div>
-        <textarea id="createContentData">{
+        <section id="category-content" class="category">
+          <h2 class="category-header">Content API</h2>
+          <div class="endpoints-grid">
+            <article class="endpoint-card">
+              <div class="method">GET /content</div>
+              <button type="button" class="action" onclick="getAllContent()">Get All Content</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">GET /content/:location</div>
+              <label>Location</label>
+              <input id="contentLocation" value="home" />
+              <button type="button" class="action" onclick="getContentByLocation()">Get Content</button>
+            </article>
+            <article class="endpoint-card">
+              <div class="method">POST /content</div>
+              <label>JSON body</label>
+              <textarea id="createContentData">{
   "Location": "home",
   "ApiName": "hero_title",
   "Content": "Welkom",
   "Type": "text",
   "PublishedBy": 1
 }</textarea>
-        <button onclick="createContent()">Create Content</button>
-        <pre id="createContentOutput"></pre>
+              <button type="button" class="action" onclick="createContent()">Create Content</button>
+            </article>
+          </div>
+        </section>
+
       </div>
 
-      <!-- Full Test -->
-      <div class="card">
-        <div class="endpoint-title">Volledige Systeemtest</div>
-        <button onclick="runFullTest()">Run All Tests</button>
-        <pre id="fullTestOutput"></pre>
+      <div class="response-box">
+        <h3>API Response</h3>
+        <pre id="apiOutput">Kies een categorie en voer een actie uit.</pre>
       </div>
-
     </div>
   </div>
 
@@ -437,6 +629,26 @@
         );
       } catch (err) {
         setOutput('uploadOutput', err);
+      }
+    }
+
+    // Get uploads
+    async function getUploads() {
+      try {
+        const uploads = await apiRequest('/admin/uploads');
+
+        const output = document.getElementById('uploadsOutput');
+
+        output.innerHTML = uploads.map(img => `
+          <div style="margin-bottom:20px">
+            <img src="http://localhost:3000${img.url}"
+                style="max-width:200px;display:block;margin-bottom:10px">
+            <code>${img.url}</code>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        setOutput('uploadsOutput', err);
       }
     }
 
