@@ -142,7 +142,25 @@
                 <div class="stat-label">Tijdperk</div>
               </div>
             </div>
-            <button class="play-btn">
+            <header class="navbar">
+              <h3>Midden Beemster</h3>
+              <a class="backbtn" href="#">← ga terug</a>
+            </header>
+
+            <div class="centergame">
+              <div id="iframeContainer">
+                <button id="loadIframeBtn" @click="loadIframe"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"
+                        fill="currentColor" class="bi bi-play-fill play" viewBox="0 0 16 16">
+                        <path
+                            d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+                    </svg></button>
+
+                <div v-if="showIframe" class="iframe-wrap">
+                  <iframe :src="iframeSrc" title="3D Beemster" width="1200" height="720"></iframe>
+                </div>
+              </div>
+            </div>
+            <button class="play-btn" @click="loadIframe">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <polygon points="5,3 19,12 5,21"/>
               </svg>
@@ -158,7 +176,15 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import beemsterImg from '../assets/beemster.png'
+
+const showIframe = ref(false)
+const base = import.meta.env.BASE_URL || '/'
+const iframeSrc = base + 'webcontent/index.html'
+function loadIframe() {
+  showIframe.value = true
+}
 </script>
 
 <style scoped>

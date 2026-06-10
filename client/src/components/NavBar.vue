@@ -34,8 +34,16 @@ const get = (id) => {
 }
 
 onMounted(async () => {
-  const res = await fetch('http://localhost:3000/api/content/NavBar')
-  data.value = await res.json()
+  try {
+    const res = await fetch('http://localhost:3000/api/content/NavBar')
+    if (!res.ok) {
+      console.warn('NavBar: API responded with', res.status)
+      return
+    }
+    data.value = await res.json()
+  } catch (err) {
+    console.warn('NavBar: could not fetch content, continuing without remote data', err)
+  }
 })
 </script>
 <style scoped>

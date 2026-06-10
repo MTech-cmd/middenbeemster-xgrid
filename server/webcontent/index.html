@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    canvas {
+      touch-action: none;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/",
+    "@sparkjsdev/spark": "https://cdn.jsdelivr.net/npm/@sparkjsdev/spark@latest/dist/spark.module.js"
+  }
+}
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { SparkRenderer, SplatMesh, SparkControls } from "@sparkjsdev/spark";
+    import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/loaders/OBJLoader.js';
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.01,
+      1000
+    );
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const world = new THREE.Group();
+    scene.add(world);
+
+    {
+      const loader = new THREE.CubeTextureLoader();
+      const texture = loader.load([
+        'skybox/skybox_x+.png',
+        'skybox/skybox_x-.png',
+        'skybox/skybox_y+.png',
+        'skybox/skybox_y-.png',
+        'skybox/skybox_z+.png',
+        'skybox/skybox_z-.png',
+      ]);
+      scene.background = texture;
+    }
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1));
+
+    const light = new THREE.DirectionalLight(0xffffff, 2);
+    light.position.set(5, 10, 5);
+    scene.add(light);
+
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    const spark = new SparkRenderer({ renderer });
+    world.add(spark);
+
+    const splatURL = "models/Molen_voorjaar_heel_klein.sog";
+    const background = new SplatMesh({ url: splatURL });
+    background.quaternion.set(1, 0, 0, 0);
+    background.scale.setScalar(0.5);
+    world.add(background);
+
+    const textureLoader = new THREE.TextureLoader();
+    const diffuseMap = textureLoader.load('img/balloon_c_s.jpg');
+
+    const material = new THREE.MeshStandardMaterial({
+      map: diffuseMap,
+    });
+
+    const loader = new OBJLoader();
+
+    let balloon;
+
+    loader.load('models/balloon.obj', (object) => {
+
+      object.traverse((child) => {
+        if (child.isMesh) {
+          child.material = material;
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
+      object.scale.set(0.1, 0.1, 0.1);
+
+      balloon = object;
+
+      scene.add(object);
+    });
+
+    const controls = new SparkControls({ canvas: renderer.domElement });
+
+    const orbitRadius = 1;
+    const orbitSpeed = 0.02;
+
+    const cameraOffset = new THREE.Vector3(0, 0.065, 0);
+
+    renderer.setAnimationLoop(function animate(time) {
+
+      controls.update(camera);
+
+      const t = time * 0.001 * orbitSpeed;
+      world.position.x = -Math.cos(t) * orbitRadius;
+      world.position.z = -Math.sin(t) * orbitRadius;
+
+      if (balloon) {
+        balloon.position.set(0, 0, 1);
+
+        camera.position.copy(balloon.position).add(cameraOffset);
+      }
+
+      renderer.render(scene, camera);
+    });
+
+  </script>
+</body>
+
+</html>
