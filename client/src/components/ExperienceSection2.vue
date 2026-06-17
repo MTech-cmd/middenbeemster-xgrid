@@ -109,64 +109,66 @@
         </div>
 
         <!-- Card 3: Play Card -->
-        <div class="card card-play" id="spelen">
-          <div class="play-grid">
+        <div class="card card-play" :class="{ 'card-play--active': showIframe }" id="spelen">
+          <div v-if="!showIframe" class="play-grid">
             <div class="play-img-wrap">
               <img :src="beemsterImg" alt="Beemster 3D Scan" class="play-img" />
             </div>
-          <div class="play-inner">
-            <div class="play-label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-              Speel Nu
-            </div>
-            <h3 class="play-title">Begin je 3D wandeling</h3>
-            <p class="play-desc">
-              Volledig interactieve 3D scan omgeving waar je vrijelijk kunt rondlopen, historische objecten kunt ontdekken en de transformatie van Midden-Beemster door de tijd kunt beleven. Geen download vereist — speel direct in je browser.
-            </p>
-            <div class="stats-grid">
-              <div class="stat-box">
-                <div class="stat-value">360°</div>
-                <div class="stat-label">Rondlopen</div>
+            <div class="play-inner">
+              <div class="play-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Speel Nu
               </div>
-              <div class="stat-box">
-                <div class="stat-value">4K</div>
-                <div class="stat-label">Kwaliteit</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-value">1612</div>
-                <div class="stat-label">Tijdperk</div>
-              </div>
-            </div>
-            <header class="navbar">
-              <h3>Midden Beemster</h3>
-              <a class="backbtn" href="#">← ga terug</a>
-            </header>
-
-            <div class="centergame">
-              <div id="iframeContainer">
-                <button id="loadIframeBtn" @click="loadIframe"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"
-                        fill="currentColor" class="bi bi-play-fill play" viewBox="0 0 16 16">
-                        <path
-                            d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
-                    </svg></button>
-
-                <div v-if="showIframe" class="iframe-wrap">
-                  <iframe :src="iframeSrc" title="3D Beemster" width="1200" height="720"></iframe>
+              <h3 class="play-title">Begin je 3D wandeling</h3>
+              <p class="play-desc">
+                Volledig interactieve 3D scan omgeving waar je vrijelijk kunt rondlopen, historische objecten kunt ontdekken en de transformatie van Midden-Beemster door de tijd kunt beleven. Geen download vereist — speel direct in je browser.
+              </p>
+              <div class="stats-grid">
+                <div class="stat-box">
+                  <div class="stat-value">360°</div>
+                  <div class="stat-label">Rondlopen</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-value">4K</div>
+                  <div class="stat-label">Kwaliteit</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-value">1612</div>
+                  <div class="stat-label">Tijdperk</div>
                 </div>
               </div>
+              <button class="play-btn" @click="loadIframe">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+                start 3d ervaring
+              </button>
             </div>
-            <button class="play-btn" @click="loadIframe">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5,3 19,12 5,21"/>
-              </svg>
-              Start 3D Wandeling
-            </button>
           </div>
+
+          <div v-else ref="experienceViewRef" class="experience-view">
+            <div class="experience-toolbar">
+              <button class="stop-btn" @click="stopExperience">
+                stop 3d ervaring
+              </button>
+              <button class="fullscreen-btn" @click="toggleFullscreen" :title="isFullscreen ? 'Volledig scherm verlaten' : 'Volledig scherm'">
+                <svg v-if="!isFullscreen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>
+                </svg>
+                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>
+                </svg>
+                {{ isFullscreen ? 'verlaat volledig scherm' : 'volledig scherm' }}
+              </button>
+            </div>
+            <div class="iframe-wrap">
+              <iframe :src="iframeSrc" title="3D Beemster"></iframe>
+            </div>
           </div>
         </div>
 
@@ -176,15 +178,49 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import beemsterImg from '../assets/beemster.png'
 
 const showIframe = ref(false)
+const isFullscreen = ref(false)
+const experienceViewRef = ref(null)
 const base = import.meta.env.BASE_URL || '/'
 const iframeSrc = base + 'webcontent/index.html'
+
 function loadIframe() {
   showIframe.value = true
 }
+
+function stopExperience() {
+  if (document.fullscreenElement === experienceViewRef.value) {
+    document.exitFullscreen()
+  }
+  showIframe.value = false
+  isFullscreen.value = false
+}
+
+async function toggleFullscreen() {
+  const el = experienceViewRef.value
+  if (!el) return
+
+  if (!document.fullscreenElement) {
+    await el.requestFullscreen()
+  } else {
+    await document.exitFullscreen()
+  }
+}
+
+function onFullscreenChange() {
+  isFullscreen.value = document.fullscreenElement === experienceViewRef.value
+}
+
+onMounted(() => {
+  document.addEventListener('fullscreenchange', onFullscreenChange)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('fullscreenchange', onFullscreenChange)
+})
 </script>
 
 <style scoped>
@@ -397,6 +433,14 @@ function loadIframe() {
   border-color: #c9a55a;
 }
 
+.card-play--active {
+  min-height: min(92vh, 1050px);
+}
+
+.card-play--active:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
 .play-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -507,6 +551,88 @@ function loadIframe() {
 .play-btn:hover {
   background-color: #b8923f;
   transform: scale(1.04);
+}
+
+.stop-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.75rem 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.stop-btn:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  transform: scale(1.02);
+}
+
+.fullscreen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: rgba(201, 165, 90, 0.15);
+  color: #c9a55a;
+  border: 1px solid rgba(201, 165, 90, 0.45);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.fullscreen-btn:hover {
+  background-color: rgba(201, 165, 90, 0.28);
+  transform: scale(1.02);
+}
+
+.experience-view {
+  display: flex;
+  flex-direction: column;
+  height: min(92vh, 1050px);
+  padding: 1rem;
+  gap: 0.75rem;
+}
+
+.experience-view:fullscreen {
+  height: 100vh;
+  max-height: none;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, #2d4d2d 0%, #1c2b1c 100%);
+}
+
+.experience-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.iframe-wrap {
+  flex: 1;
+  min-height: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #1c2b1c;
+}
+
+.iframe-wrap iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 /* ── Desktop ── */
