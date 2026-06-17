@@ -381,40 +381,43 @@
     "hero_image": "/uploads/banner.jpg"
   }
 }</textarea>
-              <button type="button" class="action" onclick="updateContent()">Save Content</button>
-            </article>
-            <article class="endpoint-card">
-              <div class="method">DELETE /admin/pages/:id</div>
-              <label>Pagina ID</label>
-              <input id="deletePageId" value="1" />
-              <button type="button" class="action" onclick="deletePage()">Delete Page</button>
-            </article>
-            <article class="endpoint-card">
-              <div class="method">POST /admin/upload</div>
-              <label>Bestand</label>
-              <input type="file" id="imageFile" />
-              <button type="button" class="action" onclick="uploadImage()">Upload Image</button>
-            </article>
-          </div>
-        </section>
+        <button onclick="updateContent()">Save Content</button>
+        <pre id="contentOutput"></pre>
+      </div>
 
-        <section id="category-content" class="category">
-          <h2 class="category-header">Content API</h2>
-          <div class="endpoints-grid">
-            <article class="endpoint-card">
-              <div class="method">GET /content</div>
-              <button type="button" class="action" onclick="getAllContent()">Get All Content</button>
-            </article>
-            <article class="endpoint-card">
-              <div class="method">GET /content/:location</div>
-              <label>Location</label>
-              <input id="contentLocation" value="home" />
-              <button type="button" class="action" onclick="getContentByLocation()">Get Content</button>
-            </article>
-            <article class="endpoint-card">
-              <div class="method">POST /content</div>
-              <label>JSON body</label>
-              <textarea id="createContentData">{
+      <!-- Delete Page -->
+      <div class="card">
+        <div class="endpoint-title">DELETE /admin/pages/:id</div>
+        <input id="deletePageId" value="1" />
+        <button onclick="deletePage()">Delete Page</button>
+        <pre id="deletePageOutput"></pre>
+      </div>
+
+      <!-- Upload -->
+      <div class="card">
+        <div class="endpoint-title">POST /admin/upload</div>
+        <input type="file" id="imageFile" />
+        <button onclick="uploadImage()">Upload Image</button>
+        <pre id="uploadOutput"></pre>
+      </div>
+
+      <!-- Content API -->
+      <div class="card">
+        <div class="endpoint-title">GET /content</div>
+        <button onclick="getAllContent()">Get All Content</button>
+        <pre id="allContentOutput"></pre>
+      </div>
+
+      <div class="card">
+        <div class="endpoint-title">GET /content/:location</div>
+        <input id="contentLocation" value="home" />
+        <button onclick="getContentByLocation()">Get Content by Location</button>
+        <pre id="contentLocationOutput"></pre>
+      </div>
+
+      <div class="card">
+        <div class="endpoint-title">POST /content</div>
+        <textarea id="createContentData">{
   "Location": "home",
   "ApiName": "hero_title",
   "Content": "Welkom",
@@ -651,6 +654,26 @@
       } catch (err) {
         setOutput(err);
         showToast(getErrorMessage(err, 'Upload mislukt'), 'error');
+      }
+    }
+
+    // Get uploads
+    async function getUploads() {
+      try {
+        const uploads = await apiRequest('/admin/uploads');
+
+        const output = document.getElementById('uploadsOutput');
+
+        output.innerHTML = uploads.map(img => `
+          <div style="margin-bottom:20px">
+            <img src="http://localhost:3000${img.url}"
+                style="max-width:200px;display:block;margin-bottom:10px">
+            <code>${img.url}</code>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        setOutput('uploadsOutput', err);
       }
     }
 

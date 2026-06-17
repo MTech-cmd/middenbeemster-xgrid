@@ -224,4 +224,35 @@ router.use((err, req, res, next) => {
   next(err);
 });
 
+// GET /api/admin/uploads
+router.get('/uploads', async (req, res) => {
+  try {
+    const files = fs.readdirSync(uploadDir);
+
+    const images = files.map(file => {
+      const fullPath = path.join(uploadDir, file);
+      const stats = fs.statSync(fullPath);
+
+      return {
+        filename: file,
+        url: `/uploads/${file}`,
+        size: stats.size,
+        createdAt: stats.birthtime,
+      };
+    });
+
+    // Nieuwste eerst
+    images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.json(images);
+
+  } catch (err) {
+    console.error('Fout bij ophalen uploads:', err);
+
+    res.status(500).json({
+      error: 'Kon uploads niet ophalen'
+    });
+  }
+});
+
 module.exports = router;
