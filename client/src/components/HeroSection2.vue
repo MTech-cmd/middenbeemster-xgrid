@@ -17,7 +17,7 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#ontdekken" class="btn-primary">
+        <a href="#eerste-card" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
             <circle cx="12" cy="12" r="3"/>
@@ -28,7 +28,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <polygon points="5,3 19,12 5,21"/>
           </svg>
-          3D Tour Starten
+          3D Ervaring Starten
         </button>
       </div>
 
@@ -49,8 +49,10 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['start-experience'])
+
 function startExperience() {
-  alert('De 3D ervaring wordt geladen...')
+  emit('start-experience')
 }
 </script>
 

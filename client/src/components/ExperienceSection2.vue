@@ -14,7 +14,7 @@
       <div class="cards-stack" id="tour">
 
         <!-- Card 1: About Midden-Beemster -->
-        <div class="card card-light">
+        <div id="eerste-card" class="card card-light">
           <div class="card-grid">
             <div class="card-img-wrap">
               <img
@@ -190,6 +190,20 @@ const iframeSrc = base + 'webcontent/index.html'
 function loadIframe() {
   showIframe.value = true
 }
+
+function scrollToElement(id) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+function startExperience() {
+  scrollToElement('spelen')
+  loadIframe()
+}
+
+defineExpose({ startExperience })
 
 function stopExperience() {
   if (document.fullscreenElement === experienceViewRef.value) {
