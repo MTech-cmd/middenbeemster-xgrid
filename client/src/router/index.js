@@ -5,7 +5,10 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterView from '../views/RegisterView.vue'
 import Design2View from '../views/Design2View.vue'
 import DesignServer from '../views/DesignServer.vue'
-import AdminDashboard from '../views/admin/AdminDashboard.vue'
+import AdminDashboard from '../components/admin/AdminDashboard.vue'
+import PageList from '../components/admin/PageList.vue'
+import PageEditor from '../components/admin/PageEditor.vue'
+import NavbarEditor from '../components/admin/NavbarEditor.vue'
 
 const routes = [
   {
@@ -15,8 +18,25 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'admin',
     component: AdminDashboard,
+    redirect: '/admin/pages',
+    children: [
+      {
+        path: 'pages',
+        name: 'admin-pages',
+        component: PageList,
+      },
+      {
+        path: 'pages/:id',
+        name: 'admin-page-edit',
+        component: PageEditor,
+      },
+      {
+        path: 'navbar',
+        name: 'admin-navbar',
+        component: NavbarEditor,
+      },
+    ],
   },
   {
     path: '/design1',
@@ -46,7 +66,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/',
-  }
+  },
 ]
 
 const router = createRouter({

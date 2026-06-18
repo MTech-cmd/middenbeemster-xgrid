@@ -7,62 +7,49 @@
     >
       <div class="preview-modal">
 
-```
-    <div class="preview-modal-header">
-      <span>Preview</span>
+        <div class="preview-modal-header">
+          <span>Preview</span>
 
-      <button
-        class="modal-close"
-        @click="$emit('update:modelValue', false)"
-      >
-        ✕
-      </button>
-    </div>
-
-    <div class="preview-frame-wrap">
-
-      <div class="tpl tpl-landing">
-
-        <div
-          class="tpl-hero"
-          :style="heroStyle"
-        >
-          <div class="tpl-hero-overlay">
-
-            <h2>{{ get('hero_title') }}</h2>
-
-            <p>{{ get('hero_subtitle') }}</p>
-
-            <button class="tpl-cta">
-              {{ get('cta_label') }}
-            </button>
-
-          </div>
+          <button
+            class="modal-close"
+            @click="$emit('update:modelValue', false)"
+          >
+            ✕
+          </button>
         </div>
 
-        <div class="tpl-section">
+        <div class="preview-frame-wrap">
+          <div class="tpl tpl-landing">
 
-          <img
-            v-if="get('section1_image')"
-            :src="get('section1_image')"
-            class="tpl-section-img"
-          >
+            <div class="tpl-hero" :style="heroStyle">
+              <div class="tpl-hero-overlay">
+                <h2>{{ get('hero_title') }}</h2>
+                <p>{{ get('hero_subtitle') }}</p>
 
-          <div>
-            <h3>{{ get('section1_title') }}</h3>
-            <p>{{ get('section1_text') }}</p>
+                <button class="tpl-cta">
+                  {{ get('cta_label') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="tpl-section">
+              <img
+                v-if="get('section1_image')"
+                :src="get('section1_image')"
+                class="tpl-section-img"
+              >
+
+              <div>
+                <h3>{{ get('section1_title') }}</h3>
+                <p>{{ get('section1_text') }}</p>
+              </div>
+            </div>
+
           </div>
-
         </div>
 
       </div>
-
     </div>
-
-  </div>
-</div>
-```
-
   </Transition>
 </template>
 
@@ -71,24 +58,17 @@ import { computed } from 'vue'
 
 const props = defineProps({
   modelValue: Boolean,
-  fields: Array
+  fields:     Array
 })
 
 defineEmits(['update:modelValue'])
 
 function get(key) {
-  const field = props.fields.find(
-    f => f.apiName === key
-  )
-
-  return field?.value || ''
+  return props.fields.find(f => f.apiName === key)?.value ?? ''
 }
 
 const heroStyle = computed(() => {
   const image = get('hero_image')
-
-  return image
-    ? `background-image:url(${image})`
-    : ''
+  return image ? `background-image: url(${image})` : ''
 })
 </script>

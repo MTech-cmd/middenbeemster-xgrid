@@ -1,44 +1,47 @@
 <template>
   <aside class="sidebar">
+
     <div class="sidebar-logo">
       <span class="logo-mark">⚙</span>
       <span class="logo-text">Admin</span>
     </div>
 
-```
-<nav class="sidebar-nav">
-  <button
-    class="nav-item"
-    :class="{ active: active === 'pages' }"
-    @click="$emit('change','pages')"
-  >
-    <i class="ti ti-layout-grid"></i>
-    <span>Pagina's</span>
-  </button>
+    <nav class="sidebar-nav">
 
-  <button
-    class="nav-item"
-    :class="{ active: active === 'navbar' }"
-    @click="$emit('change','navbar')"
-  >
-    <i class="ti ti-menu-2"></i>
-    <span>Navigatie</span>
-  </button>
-</nav>
+      <RouterLink
+        to="/admin/pages"
+        class="nav-item"
+        :class="{ active: isPagesActive }"
+      >
+        <i class="ti ti-layout-grid"></i>
+        <span>Pagina's</span>
+      </RouterLink>
 
-<slot />
-```
+      <RouterLink
+        to="/admin/navbar"
+        class="nav-item"
+        :class="{ active: isNavbarActive }"
+      >
+        <i class="ti ti-menu-2"></i>
+        <span>Navigatie</span>
+      </RouterLink>
+
+    </nav>
+
+    <slot />
 
   </aside>
 </template>
 
 <script setup>
-defineProps({
-  active: {
-    type: String,
-    required: true
-  }
-})
+import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
-defineEmits(['change'])
+const route = useRoute()
+
+const isPagesActive = computed(() =>
+  route.name === 'admin-pages' || route.name === 'admin-page-edit'
+)
+
+const isNavbarActive = computed(() => route.name === 'admin-navbar')
 </script>
