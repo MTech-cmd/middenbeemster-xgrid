@@ -67,20 +67,16 @@
             />
           </div>
 
-          <div class="actions">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              :disabled="loading"
-              :style="{ opacity: loading ? 0.85 : 1 }"
-            >
-              {{ loading ? 'Bezig met inloggen…' : 'Log in' }}
-            </button>
-            <router-link class="btn btn-secondary" to="/register">
-              Account aanmaken
-            </router-link>
-          </div>
-
+            <div class="actions">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                :disabled="loading"
+                :style="{ opacity: loading ? 0.85 : 1 }"
+              >
+                {{ loading ? 'Bezig met inloggen…' : 'Log in' }}
+              </button>
+            </div>
           <div class="meta">
             <span>UNESCO Werelderfgoed · Beemster</span>
             <a href="/">Terug naar home</a>

@@ -5,7 +5,7 @@ import LoginPage from '../views/LoginPage.vue'
 import RegisterView from '../views/RegisterView.vue'
 import Design2View from '../views/Design2View.vue'
 import DesignServer from '../views/DesignServer.vue'
-import AdminDashboard from '../views/admin/AdminDashboard.vue'
+import AdminDashboard from '../components/admin/AdminDashboard.vue'
 
 const routes = [
   {

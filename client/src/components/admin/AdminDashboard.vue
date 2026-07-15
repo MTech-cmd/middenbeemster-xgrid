@@ -29,7 +29,7 @@
 <script setup>
 import { ref } from 'vue'
 
-import Sidebar from '@/components/admin/Sidebar.vue'
+import Sidebar from './Sidebar.vue'
 
 import PageEditor from './PageEditor.vue'
 import NavbarEditor from './NavbarEditor.vue'

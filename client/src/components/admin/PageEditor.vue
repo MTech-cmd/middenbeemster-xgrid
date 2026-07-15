@@ -190,7 +190,7 @@
 <script setup>
 import { ref } from 'vue'
 
-import PreviewModal from '@/components/admin/PreviewModal.vue'
+import PreviewModal from './PreviewModal.vue'
 
 import {
   getPage,
@@ -199,7 +199,7 @@ import {
   updatePageContent,
   uploadImage as uploadImageApi
 }
-from '@/services/admin.js'
+from '../../../../server/routes/admin.js'
 
 const saving = ref(false)
 

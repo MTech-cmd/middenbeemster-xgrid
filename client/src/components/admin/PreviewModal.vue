@@ -1,68 +1,71 @@
 <template>
   <Transition name="modal">
-    <div
-      v-if="modelValue"
-      class="modal-overlay"
-      @click.self="$emit('update:modelValue', false)"
-    >
-      <div class="preview-modal">
-
-```
-    <div class="preview-modal-header">
-      <span>Preview</span>
-
-      <button
-        class="modal-close"
-        @click="$emit('update:modelValue', false)"
-      >
-        ✕
-      </button>
-    </div>
-
-    <div class="preview-frame-wrap">
-
-      <div class="tpl tpl-landing">
-
+    <div>
         <div
-          class="tpl-hero"
-          :style="heroStyle"
+          v-if="modelValue"
+          class="modal-overlay"
+          @click.self="$emit('update:modelValue', false)"
         >
-          <div class="tpl-hero-overlay">
+          <div class="preview-modal">
 
-            <h2>{{ get('hero_title') }}</h2>
 
-            <p>{{ get('hero_subtitle') }}</p>
+        <div class="preview-modal-header">
+          <span>Preview</span>
 
-            <button class="tpl-cta">
-              {{ get('cta_label') }}
-            </button>
-
-          </div>
+          <button
+            class="modal-close"
+            @click="$emit('update:modelValue', false)"
+          >
+            ✕
+          </button>
         </div>
 
-        <div class="tpl-section">
+        <div class="preview-frame-wrap">
 
-          <img
-            v-if="get('section1_image')"
-            :src="get('section1_image')"
-            class="tpl-section-img"
-          >
+          <div class="tpl tpl-landing">
 
-          <div>
-            <h3>{{ get('section1_title') }}</h3>
-            <p>{{ get('section1_text') }}</p>
+            <div
+              class="tpl-hero"
+              :style="heroStyle"
+            >
+              <div class="tpl-hero-overlay">
+
+                <h2>{{ get('hero_title') }}</h2>
+
+                <p>{{ get('hero_subtitle') }}</p>
+
+                <button class="tpl-cta">
+                  {{ get('cta_label') }}
+                </button>
+
+              </div>
+            </div>
+
+            <div class="tpl-section">
+
+              <img
+                v-if="get('section1_image')"
+                :src="get('section1_image')"
+                class="tpl-section-img"
+              >
+
+              <div>
+                <h3>{{ get('section1_title') }}</h3>
+                <p>{{ get('section1_text') }}</p>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
 
       </div>
-
     </div>
 
-  </div>
-</div>
-```
 
+
+    </div>
   </Transition>
 </template>
 
