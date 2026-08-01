@@ -3,20 +3,31 @@
     <div class="navbar-inner">
       <a href="#" class="navbar-brand">
         <div class="navbar-logo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <img
+            v-if="navbar.logo.imageUrl"
+            :src="resolveUploadUrl(navbar.logo.imageUrl)"
+            :alt="navbar.logo.altText"
+            class="navbar-logo-image"
+          >
+          <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/>
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="3" y="14" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
           </svg>
         </div>
-        <span class="navbar-title">Midden-Beemster</span>
+        <span class="navbar-title">{{ navbar.logo.altText || 'Midden-Beemster' }}</span>
       </a>
 
       <div class="navbar-links">
-        <a href="#ontdekken" class="nav-link">Ontdekken</a>
-        <a href="#tour" class="nav-link">3D Tour</a>
-        <a href="#spelen" class="nav-btn">Speel Nu →</a>
+        <a
+          v-for="item in navbar.items"
+          :key="item.id"
+          :href="item.link"
+          :class="item.id === navbar.items[navbar.items.length - 1]?.id ? 'nav-btn' : 'nav-link'"
+        >
+          {{ item.name }}
+        </a>
       </div>
     </div>
   </nav>
@@ -24,18 +35,22 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { resolveUploadUrl } from '../services/admin.js'
 
 const activeCard = ref('info')
-const data = ref([])
-
-// helper functie
-const get = (id) => {
-  return data.value.find(item => item.ApiName === id)?.Content || ''
-}
+const navbar = ref({
+  logo: {
+    imageUrl: '',
+    altText: 'Midden-Beemster',
+    width: 180,
+    height: 48,
+  },
+  items: [],
+})
 
 onMounted(async () => {
-  const res = await fetch('http://localhost:3000/api/content/NavBar')
-  data.value = await res.json()
+  const res = await fetch('http://localhost:3000/api/content/navbar')
+  navbar.value = await res.json()
 })
 </script>
 <style scoped>
@@ -76,6 +91,14 @@ onMounted(async () => {
   justify-content: center;
   color: #1c2b1c;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.navbar-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .navbar-title {

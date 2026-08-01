@@ -1,39 +1,69 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const {
+  defaultNavbarState,
+  ensureMediaSchema,
+  loadPublicNavbarState,
+} = require('../mediaStore');
 
-// alles ophalen
+const schemaReady = ensureMediaSchema(pool);
+
+router.get('/navbar', async (req, res) => {
+  try {
+    await schemaReady;
+    const navbar = await loadPublicNavbarState(pool);
+    res.json(navbar || defaultNavbarState);
+  } catch (error) {
+    console.error('Fout bij ophalen publieke navbar:', error);
+    res.status(500).json({ error: 'Interne serverfout' });
+  }
+});
+
 router.get('/', async (req, res) => {
-  const conn = await pool.getConnection();
-  const data = await conn.query('SELECT * FROM Content');
-  conn.release();
-  res.json(data);
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+    const data = await conn.query('SELECT * FROM Content');
+    res.json(data);
+  } finally {
+    if (conn) conn.release();
+  }
 });
 
-// ophalen op location
 router.get('/:location', async (req, res) => {
-  const conn = await pool.getConnection();
-  const data = await conn.query(
-    'SELECT * FROM Content WHERE Location = ? ORDER BY ApiName ASC',
-    [req.params.location]
-  );
-  conn.release();
-  res.json(data);
+  let conn;
+
+  try {
+    conn = await pool.getConnection();
+    const data = await conn.query(
+      'SELECT * FROM Content WHERE Location = ? ORDER BY ApiName ASC',
+      [req.params.location]
+    );
+    res.json(data);
+  } finally {
+    if (conn) conn.release();
+  }
 });
 
-// toevoegen
 router.post('/', async (req, res) => {
-  const { Location, ApiName, Content, Type, PublishedBy } = req.body;
+  const { Location, ApiName, Content, Type, PublishedBy, MediaId } = req.body;
 
-  const conn = await pool.getConnection();
-  const result = await conn.query(
-    `INSERT INTO Content (Location, ApiName, Content, Type, PublishedBy)
-     VALUES (?, ?, ?, ?, ?)`,
-    [Location, ApiName, Content, Type, PublishedBy]
-  );
-  conn.release();
+  let conn;
 
-  res.json(result);
+  try {
+    await schemaReady;
+    conn = await pool.getConnection();
+    const result = await conn.query(
+      `INSERT INTO Content (Location, ApiName, Content, Type, MediaId, PublishedBy)
+       VALUES (?, ?, ?, ?, ?, ?)` ,
+      [Location, ApiName, Content, Type, MediaId || null, PublishedBy]
+    );
+    res.json(result);
+  } finally {
+    if (conn) conn.release();
+  }
 });
 
 module.exports = router;

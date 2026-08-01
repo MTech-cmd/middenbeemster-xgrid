@@ -1,0 +1,30 @@
+{
+  "logo": {
+    "imageUrl": "",
+    "altText": "Middenbeemster Smidse",
+    "width": 180,
+    "height": 48
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Midden-Beemster",
+      "link": "/"
+    },
+    {
+      "id": 2,
+      "name": "Ontdekken",
+      "link": "/ontdekken"
+    },
+    {
+      "id": 3,
+      "name": "3D Tour",
+      "link": "/3d-tour"
+    },
+    {
+      "id": 4,
+      "name": "Speel Nu →",
+      "link": "/play"
+    }
+  ]
+}

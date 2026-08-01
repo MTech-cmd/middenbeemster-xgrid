@@ -2,7 +2,7 @@
 
 > Project: "Smidse" (Middenbeemster) Content/Admin API
 > Stack: Node.js, Express, MariaDB
-> Laatst bijgewerkt: 17 juni 2026
+> Laatst bijgewerkt: 30 juli 2026
 
 ---
 
@@ -22,8 +22,8 @@ De server gebruikt **JWT** voor authenticatie, **argon2** voor wachtwoord-hashin
 
 ```
 server/
-├── index.js              # Huidig entry point (package.json "main") — minimale placeholder server
 ├── server.js             # Volledige Express-app met alle routes/middleware (zie §3)
+├── index.js              # Minimale placeholder server
 ├── db.js                 # MariaDB connection pool
 ├── adminsecurity.js       # Losse/oude auth-middleware (ongebruikt, zie §7)
 ├── test.js                # Scratch-bestand om argon2-hash te genereren (geen onderdeel van de API)
@@ -32,8 +32,8 @@ server/
 ├── public/
 │   └── uploads/           # Opslaglocatie voor geüploade afbeeldingen (aangemaakt door adminApi.js)
 └── routes/
-    ├── admin.js           # ⚠ Geen Express-router — frontend API-client (fetch wrappers), zie §7
-    ├── adminApi.js         # Express-router: admin endpoints (pages, content, upload)
+   ├── admin.js           # Frontend API-client (fetch wrappers), zie §7
+   ├── adminApi.js         # Express-router: admin endpoints (navbar, pages, content, upload)
     ├── auth.js             # Express-router: login + authMiddleware
     ├── content.js          # Express-router: publieke content endpoints
     └── test.js             # Scratch/losse Express-app met fake-database (geen onderdeel van de API)
@@ -62,7 +62,7 @@ server/
 
 Server start op `process.env.PORT`, met fallback naar **3000**.
 
-> ⚠️ **Let op:** `package.json` heeft `"main": "index.js"` en het `start`-script draait `node index.js`. Maar `index.js` is een minimale placeholder-server zonder routes. De volledige, werkende API zit in `server.js`. Om de API daadwerkelijk te draaien, moet je `server.js` starten (bijv. `node server.js` of het `main`/`start`-script aanpassen).
+> ⚠️ **Let op:** `package.json` heeft nog `"main": "index.js"`, maar `index.js` is een minimale placeholder-server zonder routes. De volledige, werkende API zit in `server.js`. Om de API daadwerkelijk te draaien, moet je `server.js` starten (bijv. `node server.js` of het `main`/`start`-script aanpassen).
 
 ---
 
@@ -135,6 +135,13 @@ Elke route haalt een connectie op via `pool.getConnection()` en geeft deze na ge
 | POST | `/api/auth/login` | Nee | Inloggen, retourneert `{ token, role }` |
 | GET | `/api/auth/admin` | Ja (JWT + role `admin`) | Testroute om te checken of token geldig is en gebruiker admin-rol heeft |
 
+### Navbar API
+
+| Methode | Endpoint | Auth vereist | Beschrijving |
+|---|---|---|---|
+| GET | `/api/admin/navbar` | Ja | Haalt de navbar-config op met `logo` en `items` |
+| PUT | `/api/admin/navbar` | Ja | Slaat de navbar-config op en synchroniseert de `Navbar`-tabel |
+
 ### Voorbeeld request/response
 
 **POST `/api/auth/login`**
@@ -173,6 +180,13 @@ Zie §5 hierboven.
 
 ### 6.3 Admin API — `/api/admin` (vereist geldige JWT, via `authMiddleware`)
 
+**Navbar**
+
+| Methode | Endpoint | Beschrijving |
+|---|---|---|
+| GET | `/api/admin/navbar` | Navbar-config ophalen met `logo` en `items` |
+| PUT | `/api/admin/navbar` | Navbar-config opslaan en syncen met `Navbar` |
+
 **Pagina's**
 
 | Methode | Endpoint | Beschrijving |
@@ -209,9 +223,38 @@ Logica hierbij:
 - Bestandsnaam wordt gegenereerd als `<timestamp>-<random>.<ext>` om naamconflicten te voorkomen
 - Opslaglocatie: `public/uploads/` (wordt automatisch aangemaakt als deze niet bestaat)
 
+**Navbar-opslag**
+- De navbar-editor gebruikt een object met `logo` en `items`.
+- De backend bewaart de laatste configuratie ook in `server/data/navbar.json`.
+- De losse linkblokken worden daarnaast gesynchroniseerd met de bestaande `Navbar`-tabel.
+
 ---
 
-## 7. Bestanden die geen onderdeel zijn van de werkende API
+## 7. Frontend API helper
+
+**Bestand:** `client/src/services/admin.js`
+
+Dit bestand bevat de Vue-client helpers voor admin requests. De helper voegt automatisch de JWT-token uit `localStorage` toe als `Authorization: Bearer <token>` header.
+
+### Exports
+
+| Functie | Endpoint |
+|---|---|
+| `getPages(website)` | GET `/api/admin/pages` |
+| `getPage(id)` | GET `/api/admin/pages/:id` |
+| `createPage(data)` | POST `/api/admin/pages` |
+| `updatePage(id, data)` | PUT `/api/admin/pages/:id` |
+| `deletePage(id)` | DELETE `/api/admin/pages/:id` |
+| `updatePageContent(id, content)` | PUT `/api/admin/pages/:id/content` |
+| `uploadImage(file)` | POST `/api/admin/upload` |
+| `getNavbar()` | GET `/api/admin/navbar` |
+| `saveNavbar(data)` | PUT `/api/admin/navbar` |
+
+> De oude server-side helper in `routes/admin.js` hoort niet meer bij deze opzet; de Vue-client gebruikt nu `client/src/services/admin.js`.
+
+---
+
+## 8. Bestanden die geen onderdeel zijn van de werkende API
 
 De volgende bestanden zijn gevonden in de upload, maar zijn **geen actief onderdeel** van de huidige API-opzet zoals die in `server.js` draait. Het is aan te raden deze op te ruimen of duidelijk te markeren, om verwarring te voorkomen:
 
@@ -225,7 +268,7 @@ De volgende bestanden zijn gevonden in de upload, maar zijn **geen actief onderd
 
 ---
 
-## 8. Beveiligingsaandachtspunten (samenvatting)
+## 9. Beveiligingsaandachtspunten (samenvatting)
 
 Dit zijn geen blokkerende fouten, maar zaken die het waard zijn om voor productie aan te pakken:
 
@@ -237,7 +280,7 @@ Dit zijn geen blokkerende fouten, maar zaken die het waard zijn om voor producti
 
 ---
 
-## 9. Dependencies
+## 10. Dependencies
 
 Uit `package.json`:
 
@@ -259,7 +302,7 @@ Uit `package.json`:
 
 ---
 
-## 10. Setup-instructies
+## 11. Setup-instructies
 
 ```bash
 # 1. Dependencies installeren
@@ -287,7 +330,7 @@ JWT_SECRET=<een lange, willekeurige string>
 
 ---
 
-## 11. Architectuur-diagram (request flow)
+## 12. Architectuur-diagram (request flow)
 
 ```
 Client (Vue)

@@ -20,7 +20,7 @@ async function request(path, options = {}) {
 }
 
 // ── Pages ────────────────────────────────────────────────
-export const getPages   = ()               => request('/admin/pages')
+export const getPages = (website) => request(`/admin/pages${website ? `?website=${encodeURIComponent(website)}` : ''}`)
 export const getPage    = (id)             => request(`/admin/pages/${id}`)
 export const createPage = (data)           => request('/admin/pages', { method: 'POST', body: JSON.stringify(data) })
 export const updatePage = (id, data)       => request(`/admin/pages/${id}`, { method: 'PUT', body: JSON.stringify(data) })

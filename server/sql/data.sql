@@ -1,10 +1,36 @@
 USE `middenbeemster_Smidse`;
 
+INSERT INTO
+    NavbarSettings (
+        id,
+        LogoMediaId,
+        LogoAltText,
+        LogoWidth,
+        LogoHeight
+    )
+VALUES
+    (1, NULL, 'Middenbeemster Smidse', 180, 48);
 -- =========================================
 -- PAGES
 -- =========================================
-INSERT INTO Pages (id, Template, Routing, PublishedBy, lastEditedBy) VALUES
-(1, 'HomeTemplate', '/', 1, 1);
+INSERT INTO
+    Pages (
+        id,
+        Website,
+        Template,
+        Routing,
+        PublishedBy,
+        lastEditedBy
+    )
+VALUES
+    (
+        1,
+        'middenbeemster-smidse',
+        'HomeTemplate',
+        '/',
+        1,
+        1
+    );
 
 -- =========================================
 -- NAVBAR

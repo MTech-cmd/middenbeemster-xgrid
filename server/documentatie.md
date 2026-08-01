@@ -17,7 +17,7 @@ De applicatie biedt:
 * CRUD voor pagina's
 * CRUD voor contentblokken
 * Afbeelding uploads
-* Frontend helper API (`routes/admin.js`)
+* Frontend helper API (`client/src/services/admin.js`)
 
 ---
 
@@ -34,14 +34,16 @@ project/
 │
 ├── adminsecurity.js      # Auth middleware (herbruikbaar)
 ├── db.js                 # MariaDB connectiepool
-├── index.js              # Startpunt Express server
+├── server.js             # Startpunt Express server
+├── index.js              # Minimale placeholder server
 │
 ├── public/
 │   └── uploads/          # Geüploade afbeeldingen
 │
 └── frontend/
-    └── routes/
-        └── admin.js      # Frontend API helper functies
+  └── src/
+    └── services/
+      └── admin.js  # Frontend API helper functies
 ```
 
 ---
@@ -76,28 +78,11 @@ const conn = await pool.getConnection();
 
 # 4. Server Startpunt
 
-## Bestand: `index.js`
+## Bestand: `server.js`
 
-Het startpunt van de backend.
+Dit is het echte startpunt van de backend.
 
-### Minimale versie
-
-```javascript
-const express = require('express');
-const app = express();
-
-const PORT = 3000;
-
-app.get('/', (req, res) => {
-  res.send('Hallo wereld!');
-});
-
-app.listen(PORT, () => {
-  console.log(`Server draait op http://localhost:${PORT}`);
-});
-```
-
-### Uitgebreide versie (aanbevolen)
+### Middleware en routes
 
 ```javascript
 app.use(express.json());
@@ -107,6 +92,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/adminApi'));
 app.use('/api/content', require('./routes/content'));
 ```
+
+> `index.js` bestaat nog als minimale placeholder, maar draait geen volledige API.
 
 ---
 
@@ -209,7 +196,7 @@ router.post('/pages', authMiddleware, handler);
 
 # 7. Frontend API Helper
 
-## Bestand: `frontend/routes/admin.js`
+## Bestand: `client/src/services/admin.js`
 
 Dit bestand bevat helperfuncties die API-calls naar de backend doen.
 
@@ -255,6 +242,13 @@ request(path, options)
 | ------------------- | -------------------- |
 | `uploadImage(file)` | POST `/admin/upload` |
 
+### Navbar
+
+| Functie            | Endpoint            |
+| ------------------ | ------------------- |
+| `getNavbar()`      | GET `/admin/navbar` |
+| `saveNavbar(data)` | PUT `/admin/navbar` |
+
 ---
 
 # 8. Admin API
@@ -265,7 +259,58 @@ Deze route bevat alle beheerfunctionaliteit.
 
 ---
 
-# 8.1 GET `/api/admin/pages`
+## 8.1 GET `/api/admin/navbar`
+
+Haalt de navbar-configuratie op. De response bevat een `logo` object en een `items` array.
+
+### Response
+
+```json
+{
+  "logo": {
+    "imageUrl": "/uploads/logo.png",
+    "altText": "Middenbeemster Smidse",
+    "width": 180,
+    "height": 48
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Midden-Beemster",
+      "link": "/"
+    }
+  ]
+}
+```
+
+---
+
+## 8.2 PUT `/api/admin/navbar`
+
+Slaat de navbar-configuratie op.
+
+### Request
+
+```json
+{
+  "logo": {
+    "imageUrl": "/uploads/logo.png",
+    "altText": "Middenbeemster Smidse",
+    "width": 180,
+    "height": 48
+  },
+  "items": [
+    { "id": 1, "name": "Home", "link": "/" },
+    { "id": 2, "name": "Over ons", "link": "/over-ons" }
+  ]
+}
+```
+
+De backend valideert alleen globaal, schrijft de configuratie ook weg naar `server/data/navbar.json` en synchroniseert de losse links met de bestaande `Navbar`-tabel.
+
+---
+
+# 8.3 GET `/api/admin/pages`
 
 Haalt alle pagina's op.
 
@@ -284,7 +329,7 @@ Haalt alle pagina's op.
 
 ---
 
-# 8.2 GET `/api/admin/pages/:id`
+# 8.4 GET `/api/admin/pages/:id`
 
 Haalt een pagina op inclusief alle contentblokken.
 
@@ -314,7 +359,7 @@ Haalt een pagina op inclusief alle contentblokken.
 
 ---
 
-# 8.3 POST `/api/admin/pages`
+# 8.5 POST `/api/admin/pages`
 
 Maakt een nieuwe pagina aan.
 
@@ -339,7 +384,7 @@ Maakt een nieuwe pagina aan.
 
 ---
 
-# 8.4 PUT `/api/admin/pages/:id`
+# 8.6 PUT `/api/admin/pages/:id`
 
 Werkt pagina metadata bij.
 
@@ -362,7 +407,7 @@ Werkt pagina metadata bij.
 
 ---
 
-# 8.5 PUT `/api/admin/pages/:id/content`
+# 8.7 PUT `/api/admin/pages/:id/content`
 
 Slaat contentblokken op via upsert.
 
@@ -396,7 +441,7 @@ Slaat contentblokken op via upsert.
 
 ---
 
-# 8.6 DELETE `/api/admin/pages/:id`
+# 8.8 DELETE `/api/admin/pages/:id`
 
 Verwijdert pagina en gekoppelde content.
 
@@ -410,7 +455,7 @@ Verwijdert pagina en gekoppelde content.
 
 ---
 
-# 8.7 POST `/api/admin/upload`
+# 8.9 POST `/api/admin/upload`
 
 Uploadt een afbeelding.
 
@@ -669,13 +714,13 @@ npm install express mariadb multer cors jsonwebtoken argon2 dotenv
 # 22. Server starten
 
 ```bash
-node index.js
+node server.js
 ```
 
 Of met nodemon:
 
 ```bash
-npx nodemon index.js
+npx nodemon server.js
 ```
 
 ---
@@ -684,14 +729,14 @@ npx nodemon index.js
 
 | Onderdeel           | Bestand                    |
 | ------------------- | -------------------------- |
-| Server start        | `index.js`                 |
+| Server start        | `server.js`                |
 | Database            | `db.js`                    |
 | Auth routes         | `routes/auth.js`           |
 | Admin API           | `routes/adminApi.js`       |
 | Content API         | `routes/content.js`        |
 | Testserver          | `routes/test.js`           |
 | Auth middleware     | `adminsecurity.js`         |
-| Frontend API helper | `frontend/routes/admin.js` |
+| Frontend API helper | `client/src/services/admin.js` |
 | Uploads             | `public/uploads/`          |
 
 ---
